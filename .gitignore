@@ -1,5 +1,5 @@
 env/*
-!env/.gitkeep
+!env/cmd.txt
 data/*
 !data/.gitkeep
 

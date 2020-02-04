@@ -9,7 +9,7 @@
         if [ -f "$dir/.gitkeep" ]; then continue; fi
         mkdir "$dir" && touch "$dir/.gitkeep"
     done
-    mkdir env
-    if ! [ -f env/cmd.txt ]; then echo cmd > env/cmd.txt; fi
+    if [ -f env/cmd.txt ]; then exit; fi
+    mkdir env && echo cmd > env/cmd.txt
 )
 . $( dirname $BASH_SOURCE )/../../../cmd.sh > /dev/null

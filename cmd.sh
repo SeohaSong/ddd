@@ -4,7 +4,7 @@ main() {
     local dir_path=$( cd $( dirname "$BASH_SOURCE" ) && pwd )
     local file=$dir_path/cmd/$args/main.sh
 
-    if [ "${dir_path##*/}" == "CORE" ]
+    if [ "${dir_path##*/}" == "core" ]
     then . "$dir_path/cmd/__reload__/main.sh" ""
     else
         if [ -z $CMD ]; then CMD=cmd; fi
@@ -18,8 +18,8 @@ main() {
         else bash "$file" "$nxt_args"
         fi
     else
-        if [ -f "$dir_path/CORE/cmd/$args/main.sh" ]
-        then . "$dir_path/CORE/cmd.sh" ${args[@]}
+        if [ -f "$dir_path/core/cmd/$args/main.sh" ]
+        then . "$dir_path/core/cmd.sh" ${args[@]}
         else echo "$( ls "$dir_path/cmd" | grep -v ^__ )"
         fi
     fi

@@ -1,28 +1,25 @@
 main() {
     local args=( $@ )
+    local arg=${args[0]}
     local nxt_args=${args[@]:1}
-    local dir_path=$( cd $( dirname "$BASH_SOURCE" ) && pwd )
-    local file=$dir_path/cmd/$args/main.sh
-
-    if [ "${dir_path##*/}" == "core" ]
-    then . "$dir_path/cmd/__reload__/main.sh" ""
-    else
-        export CMD=$( cat $dir_path/env/cmd.txt )
-        eval "$CMD() { . $dir_path/cmd.sh \$@; } && export -f $CMD"
-    fi
-
+    local path=${BASH_SOURCE:-${(%):-%x}}
+    local adpath=$( cd "$( dirname $path )" && pwd )
+    local file="$adpath/cmd/$arg/main.sh"
+    local core cmd
+    if [ -d "$adpath/core" ]; then core=core; else core=.; fi
+    if [[ "$arg" =~ ^__ ]]; then cmd=.; else cmd=bash; fi
     if [ -f "$file" ]
     then
-        if [[ "$args" =~ ^__ ]]
-        then . "$file" "$nxt_args"
-        else bash "$file" "$nxt_args"
-        fi
+        . "$adpath/$core/tools/cmd/set.sh" "$nxt_args"
+        $cmd "$file" "$nxt_args"
+        . "$adpath/$core/tools/cmd/reset.sh" "$nxt_args"
     else
-        if [ -f "$dir_path/core/cmd/$args/main.sh" ]
-        then . "$dir_path/core/cmd.sh" ${args[@]}
-        else echo "$( ls "$dir_path/cmd" | grep -v ^__ )"
+        if [ -f "$adpath/core/cmd/$arg/main.sh" ]
+        then . "$adpath/core/cmd.sh" ${args[@]}
+        else . "$adpath/$core/tools/cmd/help.sh" "$adpath"
         fi
     fi
+    . "$adpath/$core/tools/cmd/reload.sh" "$adpath"
 }
 main $@
 unset -f main

@@ -1,1 +1,5 @@
-echo "[$CMD] \"$1.\""
+main() {
+    echo "[$( shs __name__ )] \"$@.\""
+}
+main $1
+unset -f main

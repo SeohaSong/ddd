@@ -4,4 +4,3 @@ main() {
     echo ${cmd_name:-cmd}
 }
 main $1
-unset -f main

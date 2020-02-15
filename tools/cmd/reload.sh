@@ -15,4 +15,3 @@ main() {
     if [ "$cmd" != "" ]; then eval "$cmd() { . $adpath/cmd.sh \$@; } && export -f $cmd"; fi
 }
 main $1
-unset -f main

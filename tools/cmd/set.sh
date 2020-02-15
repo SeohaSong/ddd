@@ -5,4 +5,3 @@ main() {
     '
 }
 main $1
-unset -f main

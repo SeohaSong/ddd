@@ -9,4 +9,3 @@ main() {
     done
 }
 main $1
-unset -f main

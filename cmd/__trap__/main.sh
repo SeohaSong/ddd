@@ -6,4 +6,3 @@ main() {
     " ERR
 }
 main $1
-unset -f main

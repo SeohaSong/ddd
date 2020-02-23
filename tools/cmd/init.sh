@@ -1,10 +1,19 @@
 main() {
-    export APATH='
-        local path=${BASH_SOURCE:-${(%):-%x}}
-        echo $( cd $( dirname $path ) && pwd )/${path##*/}
-    '
-    local adpath=$1
-    if [ "${adpath##*/}" == core ]; then adpath="$adpath/.."; fi
+    local args=( $@ )
+    local core=${args[0]}
+    local arg=${args[1]}
+    local dpath=$( dirname ${BASH_SOURCE:-${(%):-%x}})/../../..
+    local adpath=$( cd "$dpath" && pwd )
+
+    local path=cmd/$arg/main.sh
+    if [ "$core" == "." ]; then path=core/cmd/$arg/main.sh; fi
+    export APATH=$adpath/$path
+    export ADPATH=$( dirname "$APATH" )
+    
+    local cmd=bash
+    if [[ "$arg" =~ ^__.*__$ ]]; then cmd=.; fi
+    export CMD=$cmd
+
     local file
     for file in cmd.sh .gitignore
     do cp "$adpath/core/$file" "$adpath"
@@ -15,7 +24,9 @@ main() {
         if [ -f "$adpath/$dir/.gitkeep" ]; then continue; fi
         mkdir "$adpath/$dir" && touch "$adpath/$dir/.gitkeep"
     done
-    local cmd=$( cat "$adpath"/env/cmd.txt 2> /dev/null || : )
-    if [ "$cmd" != "" ]; then eval "$cmd() { . $adpath/cmd.sh \$@; } && export -f $cmd"; fi
+    local name=$( cat "$adpath"/env/name.txt 2> /dev/null || : )
+    if [ "$name" != "" ]
+    then eval "$name() { . $adpath/cmd.sh \$@; } && export -f $name"
+    fi
 }
 main $1

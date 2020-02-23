@@ -1,7 +1,5 @@
 main() {
-    export __apath__='
-        local path=${BASH_SOURCE:-${(%):-%x}}
-        echo $( cd $( dirname $path ) && pwd )/${path##*/}
-    '
+    :
+    # set args
 }
 main $1

@@ -1,4 +1,10 @@
 main() {
+
+    export __apath__='
+        local path=${BASH_SOURCE:-${(%):-%x}}
+        echo $( cd $( dirname $path ) && pwd )/${path##*/}
+    '
+
     local adpath=$1
     if [ "${adpath##*/}" == core ]; then adpath="$adpath/.."; fi
     local file

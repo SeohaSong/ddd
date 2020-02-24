@@ -5,4 +5,4 @@ main() {
         return \$code
     " ERR
 }
-main $1
+main

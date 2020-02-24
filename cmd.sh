@@ -2,7 +2,7 @@ main() {
     local args=( $@ )
     local arg=${args[0]}
     local adpath=$( dirname "${BASH_SOURCE:-${(%):-%x}}" )
-    local core=. cmd=bash
+    local core=. cmd=$SHELL
     if [ -d "$adpath/core" ]; then core=core; fi
     if [[ "$arg" =~ ^__.*__$ ]]; then cmd=.; fi
     local nxt_args="$core ${args[@]}"

@@ -7,12 +7,8 @@ main() {
 
     local path=cmd/$arg/main.sh
     if [ "$core" == "." ]; then path=core/cmd/$arg/main.sh; fi
-    export APATH=$adpath/$path
-    export ADPATH=$( dirname "$APATH" )
-    
-    local cmd=bash
-    if [[ "$arg" =~ ^__.*__$ ]]; then cmd=.; fi
-    export CMD=$cmd
+    export __APATH__=$adpath/$path
+    export __ADPATH__=$( dirname "$__APATH__" )
 
     local file
     for file in cmd.sh .gitignore

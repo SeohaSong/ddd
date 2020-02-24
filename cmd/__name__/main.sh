@@ -1,6 +1,6 @@
 main() {
-    local adpath=$ADPATH
-    local cmd_name=$( cat $adpath/../../../env/name.txt )
+    local ADPATH=$__ADPATH__
+    local cmd_name=$( cat $ADPATH/../../../env/name.txt )
     echo ${cmd_name:-cmd}
 }
-main $1
+main

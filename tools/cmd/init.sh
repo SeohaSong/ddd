@@ -2,9 +2,10 @@ main() {
     local args=( $@ )
     local core=${args[0]}
     local arg=${args[1]}
+    export __args__=${args[@]:2}
+
     local dpath=$( dirname ${BASH_SOURCE:-${(%):-%x}})/../../..
     local adpath=$( cd "$dpath" && pwd )
-
     local path=cmd/$arg/main.sh
     if [ "$core" == "." ]; then path=core/cmd/$arg/main.sh; fi
     export __APATH__=$adpath/$path

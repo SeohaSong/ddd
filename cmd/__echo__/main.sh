@@ -1,4 +1,5 @@
 main() {
-    echo "[$( shs __name__ )] \"$@.\""
+    local args=$__args__
+    echo "[$( shs __name__ )] \"$args.\""
 }
-main $1
+main

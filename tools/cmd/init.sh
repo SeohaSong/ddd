@@ -22,7 +22,7 @@ main() {
         mkdir "$adpath/$dir" && touch "$adpath/$dir/.gitkeep"
     done
     if [ ! -f $adpath/env/cmd ]; then echo cmd > $adpath/env/cmd; fi
-    local name=$( cat "$adpath"/env/cmd 2> /dev/null || : )
+    local name=$( cat "$adpath"/env/CMD 2> /dev/null || : )
     if [ "$name" != "" ]
     then eval "$name() { . $adpath/cmd.sh \$@; } && export -f $name"
     fi

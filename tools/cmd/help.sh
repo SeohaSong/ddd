@@ -4,7 +4,7 @@ main() {
     cmd_name=${cmd_name:-cmd}
     echo "[$cmd_name]"
     local cmd
-    for cmd in $( ls "$CMD_PATH/cmd" | grep -v ^__ )
+    for cmd in $( ls "$CMD_PATH/cmd" | grep -v ^__.*__$ )
     do echo "  $cmd"
     done
 }

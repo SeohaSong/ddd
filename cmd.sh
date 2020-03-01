@@ -5,7 +5,7 @@ main() {
     local core=. cmd='bash -c'
     if [ -d "$adpath/core" ]; then core=core; fi
     if [[ "$arg" =~ ^__.*__$ ]]; then cmd=eval; fi
-    local nxt_args="$core ${args[@]}"
+    local nxt_args="$adpath ${args[@]}"
     . $adpath/$core/tools/cmd/init.sh "$nxt_args"
     if [ -f "$__APATH__" ]
     then $cmd 'main() { . $__APATH__; }; main'

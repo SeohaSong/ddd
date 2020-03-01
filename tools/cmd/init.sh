@@ -1,17 +1,13 @@
 main() {
     local args=( $@ )
-    local core=${args[0]}
+    local adpath=${args[0]}
     local arg=${args[1]}
     export __args__=${args[@]:2}
-
-    local dpath=$( dirname ${BASH_SOURCE:-${(%):-%x}})/../../..
-    local adpath=$( cd "$dpath" && pwd )
-    local path=cmd/$arg/main.sh
-    if [ "$core" == "." ]; then path=core/cmd/$arg/main.sh; fi
     export __CMD_PATH__=$adpath
-    export __APATH__=$adpath/$path
+    export __APATH__=$adpath/cmd/$arg/main.sh
     export __ADPATH__=$( dirname "$__APATH__" )
 
+    if [ ${adpath##*/} == core ]; then adpath=$adpath/..; fi
     local file
     for file in cmd.sh .gitignore; do cp "$adpath/core/$file" "$adpath"; done
     local dir 

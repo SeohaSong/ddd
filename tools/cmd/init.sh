@@ -19,7 +19,7 @@ main() {
     for dir in data cmd env tools tools/src
     do
         if [ ! -d $adpath/$dir ]; then mkdir $adpath/$dir; fi
-        if [ ! -f $adpath/$dir/.gitkeep ]; then mkdir $adpath/$dir/.gitkeep; fi
+        if [ ! -f $adpath/$dir/.gitkeep ]; then touch $adpath/$dir/.gitkeep; fi
     done
     if [ ! -f $adpath/env/cmd ]; then echo cmd > $adpath/env/cmd; fi
     local name=$( cat "$adpath"/env/CMD 2> /dev/null || : )

@@ -8,6 +8,7 @@ main() {
     local adpath=$( cd "$dpath" && pwd )
     local path=cmd/$arg/main.sh
     if [ "$core" == "." ]; then path=core/cmd/$arg/main.sh; fi
+    export __CMD_PATH__=$adpath
     export __APATH__=$adpath/$path
     export __ADPATH__=$( dirname "$__APATH__" )
 
@@ -22,7 +23,7 @@ main() {
         if [ ! -f $adpath/$dir/.gitkeep ]; then touch $adpath/$dir/.gitkeep; fi
     done
     if [ ! -f $adpath/env/cmd ]; then echo cmd > $adpath/env/cmd; fi
-    local name=$( cat "$adpath"/env/CMD 2> /dev/null || : )
+    local name=$( cat $adpath/env/CMD 2> /dev/null || : )
     if [ "$name" != "" ]
     then eval "$name() { . $adpath/cmd.sh \$@; } && export -f $name"
     fi

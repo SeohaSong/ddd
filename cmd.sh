@@ -11,8 +11,9 @@ main() {
     then $cmd 'main() { . $__APATH__; }; main'
     elif [ -f $adpath/core/cmd/$arg/main.sh ]
     then . $adpath/core/cmd.sh ${args[@]}
-    else . $adpath/$core/tools/cmd/help.sh $adpath
+    else . $adpath/$core/tools/cmd/help.sh
     fi
+    . $adpath/$core/tools/cmd/close.sh
 }
 main $@
 unset -f main

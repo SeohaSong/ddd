@@ -13,19 +13,17 @@ main() {
     export __ADPATH__=$( dirname "$__APATH__" )
 
     local file
-    for file in cmd.sh .gitignore
-    do cp "$adpath/core/$file" "$adpath"
-    done
+    for file in cmd.sh .gitignore; do cp "$adpath/core/$file" "$adpath"; done
     local dir 
     for dir in data cmd env tools tools/src
     do
         if [ ! -d $adpath/$dir ]; then mkdir $adpath/$dir; fi
         if [ ! -f $adpath/$dir/.gitkeep ]; then touch $adpath/$dir/.gitkeep; fi
     done
+
     if [ ! -f $adpath/env/cmd ]; then echo cmd > $adpath/env/cmd; fi
     local name=$( cat $adpath/env/CMD 2> /dev/null || : )
-    if [ "$name" != "" ]
-    then eval "$name() { . $adpath/cmd.sh \$@; } && export -f $name"
-    fi
+    local cmd="$name() { . $adpath/cmd.sh \$@; } && export -f $name"
+    if [ ! -z "$name" ]; then eval "$cmd"; fi
 }
 main $1

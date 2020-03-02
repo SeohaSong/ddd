@@ -3,35 +3,33 @@ main() {
     local dpath=${args[0]}
     local arg=${args[1]}
 
+    local adpath=$( cd $dpath && pwd )
     export __args__=${args[@]:2}
 
-    export __CMD_PATH__=$( cd $dpath && pwd )
-    export __APATH__=$__CMD_PATH__/cmd/$arg/main.sh
+    export __APATH__=$adpath/cmd/$arg/main.sh
     export __ADPATH__=$( dirname "$__APATH__" )
-    export __MAIN_PATH__=$__CMD_PATH__
-    if [ ! -d $__CMD_PATH__/core ]
-    then export __MAIN_PATH__=$( cd $__CMD_PATH__/.. && pwd )
+    export __CMD_PATH__=$adpath
+    if [ ! -d $adpath/core ]; then export __CMD_PATH__=$( cd $adpath/.. && pwd );fi
+
+    if [ ! -f $__CMD_PATH__/env/CMD ]; then echo cmd > $__CMD_PATH__/env/CMD; fi
+    local cmd_name=$( cat $__CMD_PATH__/env/CMD 2> /dev/null || : )
+    export __CMD_NAME__=$cmd_name
+    if [ ! -z "$cmd_name" ]
+    then eval "$cmd_name() { . $__CMD_PATH__/cmd.sh \$@; } && export -f $cmd_name"
     fi
 
     local file dir
     for file in cmd.sh .gitignore
-    do cp "$__MAIN_PATH__/core/$file" "$__MAIN_PATH__"
+    do cp "$__CMD_PATH__/core/$file" "$__CMD_PATH__"
     done
     for dir in data cmd env tools tools/src
     do
-        if [ ! -d $__MAIN_PATH__/$dir ]
-        then mkdir $__MAIN_PATH__/$dir
+        if [ ! -d $__CMD_PATH__/$dir ]
+        then mkdir $__CMD_PATH__/$dir
         fi
-        if [ ! -f $__MAIN_PATH__/$dir/.gitkeep ]
-        then touch $__MAIN_PATH__/$dir/.gitkeep
+        if [ ! -f $__CMD_PATH__/$dir/.gitkeep ]
+        then touch $__CMD_PATH__/$dir/.gitkeep
         fi
     done
-    
-    if [ ! -f $__MAIN_PATH__/env/CMD ]
-    then echo cmd > $__MAIN_PATH__/env/CMD
-    fi
-    local name=$( cat $__MAIN_PATH__/env/CMD 2> /dev/null || : )
-    local cmd="$name() { . $__CMD_PATH__/cmd.sh \$@; } && export -f $name"
-    if [ ! -z "$name" ]; then eval "$cmd"; fi
 }
 main $1

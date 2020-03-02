@@ -1,5 +1,8 @@
 trap "
     local code=\$? num=\$(( \$LINENO - 1 ))
-    echo \"[ERR:$( shs __name__ )] \$APATH:\$num (\$code)\"
+    local error_path=\${BASH_SOURCE:-\${(%):-%x}}
+    local error_adpath=\$( cd \$( dirname \$error_path ) && pwd )
+    local error_apath=\$error_adpath/\${error_path##*/}
+    echo \"[ERR:\$__CMD_NAME__] \$error_apath:\$num (\$code)\"
     return \$code
 " ERR

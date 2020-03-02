@@ -9,7 +9,7 @@ main() {
     export __APATH__=$__CMD_PATH__/cmd/$arg/main.sh
     export __ADPATH__=$( dirname "$__APATH__" )
     export __MAIN_PATH__=$__CMD_PATH__
-    if [ -d $__CMD_PATH__/core ]
+    if [ ! -d $__CMD_PATH__/core ]
     then export __MAIN_PATH__=$( cd $__CMD_PATH__/.. && pwd )
     fi
 
@@ -31,7 +31,7 @@ main() {
     then echo cmd > $__MAIN_PATH__/env/CMD
     fi
     local name=$( cat $__MAIN_PATH__/env/CMD 2> /dev/null || : )
-    local cmd="$name() { . $__MAIN_PATH__/cmd.sh \$@; } && export -f $name"
+    local cmd="$name() { . $__CMD_PATH__/cmd.sh \$@; } && export -f $name"
     if [ ! -z "$name" ]; then eval "$cmd"; fi
 }
 main $1

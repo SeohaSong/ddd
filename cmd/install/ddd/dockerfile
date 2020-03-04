@@ -1,0 +1,69 @@
+FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu18.04
+
+RUN apt update --yes
+RUN apt upgrade --yes
+RUN apt autoremove --yes
+RUN apt install --yes --no-install-recommends vim
+RUN apt install --yes --no-install-recommends ssh
+RUN apt install --yes --no-install-recommends sudo
+RUN apt install --yes --no-install-recommends wget
+
+ENV __USER__=seohasong
+ENV __HOME__=/home/$__USER__
+ENV __PRROFILE__=$__HOME__/.profile
+RUN echo '<KEY/>\n<KEY/>' | passwd
+RUN echo '<KEY/>\n<KEY/>' | adduser $__USER__
+RUN echo "$__USER__ ALL=(ALL:ALL) ALL" >> /etc/sudoers
+
+
+# cuda
+RUN apt install --yes --no-install-recommends libnvinfer6=6.0.1-1+cuda10.1
+RUN apt install --yes --no-install-recommends libnvinfer-dev=6.0.1-1+cuda10.1
+RUN apt install --yes --no-install-recommends \
+    libnvinfer-plugin6=6.0.1-1+cuda10.1
+ENV __TMP__=$LD_LIBRARY_PATH:\$LD_LIBRARY_PATH
+RUN echo export LD_LIBRARY_PATH=$__TMP__ >> $__PRROFILE__
+ENV __TMP__=/usr/local/cuda/extras/CUPTI/lib64:\$LD_LIBRARY_PATH
+RUN echo export LD_LIBRARY_PATH=$__TMP__ >> $__PRROFILE__
+RUN echo export PATH=/usr/local/cuda/bin:\$PATH >> $__PRROFILE__
+
+
+# python
+RUN apt install --yes --no-install-recommends python3-dev
+RUN apt install --yes --no-install-recommends python3-pip
+RUN apt install --yes --no-install-recommends python3-setuptools
+RUN ln --symbolic $( which python3 ) /usr/bin/python
+RUN ln --symbolic $( which pip3 ) /usr/bin/pip
+RUN echo export PATH=\$HOME/.local/bin:\$PATH >> $__PRROFILE__
+
+
+USER $__USER__
+WORKDIR $__HOME__
+
+
+# python
+ENV PATH=$__HOME__/.local/bin:$PATH
+RUN pip install --upgrade pip 
+RUN pip install tensorflow
+RUN pip install jupyter
+RUN pip install pandas
+RUN pip install pylint
+RUN pip install matplotlib
+
+RUN pip install pyinstaller
+
+
+# node
+ENV __DNAME__=node
+ENV __VER__=12.16.1
+ENV __NAME__=node-v$__VER__-linux-x64.tar.xz
+ENV __URL__=https://nodejs.org/dist/v$__VER__/$__NAME__
+RUN wget $__URL__
+RUN tar --extract --verbose --file $__NAME__
+RUN rm $__NAME__
+RUN mv ${__NAME__%.tar.xz} $__DNAME__
+RUN echo export PATH=\$HOME/$__DNAME__/bin:\$PATH >> $__PRROFILE__
+
+ENV PATH=$__HOME__/$__DNAME__/bin:$PATH
+RUN npm install --global npm
+RUN npm install --global @angular/cli

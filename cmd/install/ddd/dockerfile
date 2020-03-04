@@ -44,13 +44,12 @@ WORKDIR $__HOME__
 # python
 ENV PATH=$__HOME__/.local/bin:$PATH
 RUN pip install --upgrade pip 
-RUN pip install tensorflow
-RUN pip install jupyter
-RUN pip install pandas
-RUN pip install pylint
-RUN pip install matplotlib
-
 RUN pip install pyinstaller
+RUN pip install pylint
+RUN pip install pandas
+RUN pip install jupyter
+RUN pip install matplotlib
+RUN pip install tensorflow
 
 
 # node

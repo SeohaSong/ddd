@@ -6,8 +6,7 @@ local net_opt='--network host'
 if $( $CMD __is-wsl__ )
 then net_opt='--publish 22:22 --publish 4200:4200 --publish 8888:8888'
 fi
-$CMD docker run \
---detach --interactive --rm \
+$CMD docker run --detach --interactive --rm \
 --volume ${CMD_PATH#/mnt}:/home/ddd/${CMD_PATH##*/} \
 --name ddd \
 $net_opt \

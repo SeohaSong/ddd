@@ -14,13 +14,13 @@ main() {
     then export __CMD_PATH__=$( cd $adpath/.. && pwd )
     fi
     if [ ! -f $__CMD_PATH__/env/CMD ]; then echo ddd > $__CMD_PATH__/env/CMD; fi
-    local cmd_name=$( cat $__CMD_PATH__/env/CMD 2> /dev/null || : )
-    export __CMD_NAME__=$cmd_name
-    if [ ! -z "$cmd_name" ]
+    local cmd=$( cat $__CMD_PATH__/env/CMD 2> /dev/null || : )
+    export __CMD__=$cmd
+    if [ ! -z "$__CMD__" ]
     then 
         eval "
-        $cmd_name() { . $__CMD_PATH__/cmd.sh \$@; }
-        export -f $cmd_name
+        $__CMD__() { . $__CMD_PATH__/cmd.sh \$@; }
+        export -f $__CMD__
         "
     fi
     export __KEY__=$( cat "$__CMD_PATH__/env/KEY" 2> /dev/null || : )

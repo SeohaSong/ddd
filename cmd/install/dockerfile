@@ -8,7 +8,7 @@ RUN apt install --yes --no-install-recommends ssh
 RUN apt install --yes --no-install-recommends sudo
 RUN apt install --yes --no-install-recommends wget
 
-ENV __USER__=seohasong
+ENV __USER__=ddd
 ENV __HOME__=/home/$__USER__
 ENV __PRROFILE__=$__HOME__/.profile
 RUN echo '<KEY/>\n<KEY/>' | passwd

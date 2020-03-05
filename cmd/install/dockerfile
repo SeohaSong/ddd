@@ -31,7 +31,6 @@ RUN echo export PATH=/usr/local/cuda/bin:\$PATH >> $__PRROFILE__
 # python
 RUN apt install --yes --no-install-recommends python3-dev
 RUN apt install --yes --no-install-recommends python3-pip
-RUN apt install --yes --no-install-recommends python3-setuptools
 RUN ln --symbolic $( which python3 ) /usr/bin/python
 RUN ln --symbolic $( which pip3 ) /usr/bin/pip
 RUN echo export PATH=\$HOME/.local/bin:\$PATH >> $__PRROFILE__
@@ -44,12 +43,13 @@ WORKDIR $__HOME__
 # python
 ENV PATH=$__HOME__/.local/bin:$PATH
 RUN pip install --upgrade pip 
-RUN pip install pyinstaller
-RUN pip install pylint
-RUN pip install pandas
-RUN pip install jupyter
-RUN pip install matplotlib
-RUN pip install tensorflow
+RUN pip install --upgrade setuptools
+RUN pip install --upgrade pandas
+RUN pip install --upgrade pylint
+RUN pip install --upgrade jupyter
+RUN pip install --upgrade matplotlib
+RUN pip install --upgrade tensorflow
+RUN pip install --upgrade pyinstaller
 
 
 # node

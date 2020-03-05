@@ -3,10 +3,8 @@ local KEY=$__KEY__
 shs __trap__
 [ ! -z "$KEY" ]
 cd $ADPATH
-local name=dockerfile
-[ -f "ddd/$name" ]
-if [ -d seohasong ]; then rm -rf seohasong; fi
-mkdir seohasong
-cat "ddd/$name" | sed -e "s/<KEY\/>/$KEY/g" | tee "seohasong/$name"
-docker.exe build -t seohasong seohasong
-rm -r seohasong
+if [ -d ddd ]; then rm -rf ddd; fi
+mkdir ddd
+cat dockerfile | sed -e "s/<KEY\/>/$KEY/g" | tee "ddd/dockerfile"
+docker.exe build -t ddd ddd
+rm -r ddd

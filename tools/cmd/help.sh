@@ -6,5 +6,9 @@ main() {
     for cmd in $( ls "$CMD_PATH/cmd" | grep -v ^__.*__$ )
     do echo "  $cmd"
     done
+    echo "[ddd]"
+    for cmd in $( ls "$CMD_PATH/core/cmd" | grep -v ^__.*__$ )
+    do echo "  $cmd"
+    done
 }
 main $1

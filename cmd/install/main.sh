@@ -7,5 +7,10 @@ cd $ADPATH
 if [ -d ddd ]; then rm -rf ddd; fi
 mkdir ddd
 cat dockerfile | sed -e "s/<KEY\/>/$KEY/g" | tee "ddd/dockerfile"
-$CMD docker build -t ddd ddd
+local net_opt='--network host'
+if $( $CMD __is-wsl__ ); then unset net_opt; fi
+$CMD docker build \
+--tag ddd \
+$net_opt \
+ddd
 rm -r ddd

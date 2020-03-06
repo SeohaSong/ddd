@@ -5,8 +5,12 @@ RUN apt upgrade --yes
 RUN apt autoremove --yes
 RUN apt install --yes --no-install-recommends vim
 RUN apt install --yes --no-install-recommends ssh
+# RUN apt install --yes --no-install-recommends git
 RUN apt install --yes --no-install-recommends sudo
 RUN apt install --yes --no-install-recommends wget
+
+# ssh config code ...
+# sshd config code ...
 
 ENV __USER__=ddd
 ENV __HOME__=/home/$__USER__

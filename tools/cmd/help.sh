@@ -1,13 +1,11 @@
 main() {
-    local CMD_PATH=$__CMD_PATH__
-    local CMD=$__CMD__
-    echo "[$CMD]"
+    echo "[$__CMD__]"
     local cmd
-    for cmd in $( ls "$CMD_PATH/cmd" | grep -v ^__.*__$ )
+    for cmd in $( ls "$__CMD_PATH__/cmd" | grep -v ^__.*__$ )
     do echo "  $cmd"
     done
     echo "[ddd]"
-    for cmd in $( ls "$CMD_PATH/core/cmd" | grep -v ^__.*__$ )
+    for cmd in $( ls "$__CMD_PATH__/core/cmd" | grep -v ^__.*__$ )
     do echo "  $cmd"
     done
 }

@@ -29,7 +29,7 @@ main() {
     for file in cmd.sh .gitignore
     do cp "$__CMD_PATH__/core/$file" "$__CMD_PATH__"
     done
-    for dir in data cmd env tools tools/src
+    for dir in data cmd env tools
     do
         if [ ! -d $__CMD_PATH__/$dir ]
         then mkdir $__CMD_PATH__/$dir

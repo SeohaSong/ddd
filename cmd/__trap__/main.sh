@@ -1,8 +1,8 @@
-trap "
-    local code=\$? num=\$(( \$LINENO - 1 ))
-    local error_path=\${BASH_SOURCE:-\${(%):-%x}}
-    local error_adpath=\$( cd \$( dirname \$error_path ) && pwd )
-    local error_apath=\$error_adpath/\${error_path##*/}
-    echo \"[ERR:\$__CMD__] \$error_apath:\$num (\$code)\"
-    return \$code
-" ERR
+trap '
+    local e_code=$? e_line=$(( $LINENO - 1 ))
+    local e_file=${BASH_SOURCE:-${(%):-%x}}
+    local e_apath=$( cd $( dirname $e_file ) && pwd )
+    local e_afile=$e_apath/${e_file##*/}
+    echo "[ERR:'$__CMD__'] $e_afile:$e_line ($e_code)"
+    return $e_code
+' ERR

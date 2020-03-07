@@ -1,18 +1,9 @@
-local CMD_PATH=$__CMD_PATH__
-local CMD=$__CMD__
-$CMD __trap__
-
-local port=2222
-local net_opt='--network host'
-if $( $CMD __is-wsl__ )
-then net_opt="--publish $port:$port --publish 4200:4200 --publish 8888:8888"
-fi
-$CMD docker run --detach --interactive --rm \
---volume ${CMD_PATH#/mnt}:/home/ddd/${CMD_PATH##*/} \
---name ddd \
+net_opt='--publish 2222:2222 --publish 8888:8888 --publish 4200:4200'
+if ! shs __is-wsl__; then net_opt='--network host'; fi
+$DDD docker run --detach --interactive --rm \
 $net_opt \
-ddd
-echo Port $port | $CMD docker exec --interactive \
---user root \
+--name ddd \
+--volume ${DDD_PATH#/mnt}:/home/ddd/${DDD_PATH##*/} ddd
+echo Port 2222 | $DDD docker exec --interactive --user root \
 ddd tee /etc/ssh/sshd_config
-$CMD docker exec --user root ddd service ssh start
+$DDD docker exec --user root ddd service ssh start

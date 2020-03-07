@@ -1,3 +1,5 @@
-local CMD=$__CMD__
-$CMD __trap__
-ssh ddd@localhost -p 2222
+ssh ddd@localhost -t -p 2222 "
+    . .profile
+    cd ${DDD_PATH##*/}/${PWD#$DDD_PATH}
+    bash
+"

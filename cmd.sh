@@ -1,18 +1,19 @@
 main() {
     local args=( $@ )
     local arg=${args[0]}
-    local adpath=$( dirname "${BASH_SOURCE:-${(%):-%x}}" )
-    local core=. cmd='bash -c'
-    if [ -d "$adpath/core" ]; then core=core; fi
-    if [[ "$arg" =~ ^__.*__$ ]]; then cmd=eval; fi
-    local nxt_args="$adpath ${args[@]}"
-    . $adpath/$core/tools/cmd/init.sh "$nxt_args"
-    if [ -f $adpath/cmd/$arg/main.sh ]
-    then $cmd "main() { . $adpath/cmd/$arg/main.sh; } && main"
-    elif [ -f $adpath/core/cmd/$arg/main.sh ]
-    then . $adpath/core/cmd.sh ${args[@]}
-    else . $adpath/$core/tools/cmd/help.sh
+    local nxt_args=${args[@]:1}
+    local INTRO='echo ${BASH_SOURCE:-${(%):-%x}}'
+    local DDD_PATH=$( cd $( dirname $( eval $INTRO ) )/.. && pwd )
+    local DDD=$( cat $DDD_PATH/env/DDD 2> /dev/null || echo ddd )
+    eval "$DDD() { . $DDD_PATH/core/cmd.sh \$@; } && export -f $DDD"
+    local file=$DDD_PATH/core/cmd/$arg/main.sh
+    if [ ! -f $file ]; then file=$DDD_PATH/cmd/$arg/main.sh; fi
+    if [ ! -f $file ]; then $DDD help; else
+    local cmd=". $file '$nxt_args'"
+    if [[ ! "$arg" =~ ^__.*__$ ]]; then
+        cmd="( $DDD __init__ $nxt_args; $cmd 2>&1 ) 2> /dev/null"
+        cmd="$cmd; $DDD __close__ \$?"
     fi
-    . $adpath/$core/tools/cmd/close.sh $?
+    eval $cmd; fi
 }
 main $@

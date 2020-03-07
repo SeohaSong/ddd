@@ -5,8 +5,8 @@ main() {
     local INTRO='echo ${BASH_SOURCE:-${(%):-%x}}'
     local DDD_PATH=$( cd $( dirname $( eval $INTRO ) )/.. && pwd )
     local DDD=$( cat $DDD_PATH/env/DDD 2> /dev/null || echo ddd )
-    eval "$DDD() { . $DDD_PATH/core/cmd.sh \$@; } && export -f $DDD"
-    local file=$DDD_PATH/core/cmd/$arg/main.sh
+    eval "$DDD() { . $DDD_PATH/ddd/cmd.sh \$@; } && export -f $DDD"
+    local file=$DDD_PATH/ddd/cmd/$arg/main.sh
     if [ ! -f $file ]; then file=$DDD_PATH/cmd/$arg/main.sh; fi
     if [ ! -f $file ]; then $DDD help; else
     local cmd=". $file '$nxt_args'"

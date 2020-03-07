@@ -6,6 +6,6 @@ do
     $DDD echo $ver
     $DDD docker run --tty --interactive --rm \
     --volume ${DDD_PATH#/mnt}:/home/ddd/${DDD_PATH##*/} \
-    --workdir /home/ddd/${DDD_PATH##*/} \
+    --workdir /home/ddd/${DDD_PATH##*/}/${PWD#$DDD_PATH} \
     ubuntu:$ver $ARGS
 done

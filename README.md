@@ -8,7 +8,7 @@ Docker (...)
 Bash (>= 4.4)
 ```
 
-## Description (macro)
+## Description (Macro)
 ```
 - ddd (core)
 공용 코어 프레임워크
@@ -27,6 +27,14 @@ Bash (>= 4.4)
     - 코어기능과 호환성이 완전해야함
     - 코어기능과 호환성이 완전하도록 코어에 의해 조정됨
 ```
+
+## Description (Micro)
+1. play -> (run, login) -> stop
+1. init -> close
+1. acativate -> deactivate
+1. exe
+1. confirm
+1. help
 
 ## Official Patterns
 ### First
@@ -54,8 +62,3 @@ Bash (>= 4.4)
 ....)
 ```
 
-## Flow
-1. play -> (run, login) -> stop
-1. init -> close
-1. confirm
-1. help

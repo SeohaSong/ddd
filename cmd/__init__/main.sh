@@ -10,4 +10,9 @@ do
     if [ ! -f $path/.gitkeep ]; then touch $path/.gitkeep; fi
 done
 if [ ! -f $DDD_PATH/env/DDD ]; then echo ddd > $DDD_PATH/env/DDD; fi
-trap "$( cat $DDD_PATH/ddd/tools/common/trap.sh )" ERR
+trap 'local e_code=$? e_line=$LINENO
+local e_file=${BASH_SOURCE:-${(%):-%x}}
+local e_apath=$( cd $( dirname $e_file ) && pwd )
+local e_afile=$e_apath/${e_file##*/}
+echo "[ERR: ${DDD:-ddd}] $e_afile:$e_line ($e_code)" >&2
+return $e_code' ERR

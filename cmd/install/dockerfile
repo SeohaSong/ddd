@@ -1,4 +1,5 @@
-FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu18.04
+FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu16.04
+
 
 # base
 RUN apt update --yes
@@ -22,6 +23,7 @@ RUN cat $__TMP__ | grep -v ServerAliveInterval | tee ${__TMP__}_
 RUN mv ${__TMP__}_ $__TMP__
 RUN echo ServerAliveInterval 60 | tee -a $__TMP__
 
+
 # cuda
 RUN apt install --yes --no-install-recommends libnvinfer6=6.0.1-1+cuda10.1
 RUN apt install --yes --no-install-recommends libnvinfer-dev=6.0.1-1+cuda10.1
@@ -33,6 +35,7 @@ ENV __TMP__=/usr/local/cuda/extras/CUPTI/lib64:\$LD_LIBRARY_PATH
 RUN echo export LD_LIBRARY_PATH=$__TMP__ >> $__PRROFILE__
 RUN echo export PATH=/usr/local/cuda/bin:\$PATH >> $__PRROFILE__
 
+
 # python
 RUN apt install --yes --no-install-recommends python3-dev
 RUN apt install --yes --no-install-recommends python3-pip
@@ -41,8 +44,16 @@ RUN ln --symbolic $( which pip3 ) /usr/bin/pip
 RUN echo export PATH=\$HOME/.local/bin:\$PATH >> $__PRROFILE__
 
 
+# bash
+RUN wget https://ftp.gnu.org/gnu/bash/bash-4.4.tar.gz
+RUN tar --extract --verbose --file bash-4.4.tar.gz
+RUN cd bash-4.4 && ./configure && make && make install
+RUN rm -r bash-4.4*
+
+
 USER $__USER__
 WORKDIR $__HOME__
+
 
 # python
 ENV PATH=$__HOME__/.local/bin:$PATH
@@ -54,6 +65,7 @@ RUN pip install --upgrade jupyter
 RUN pip install --upgrade matplotlib
 RUN pip install --upgrade tensorflow
 RUN pip install --upgrade pyinstaller
+
 
 # node
 ENV __DNAME__=node

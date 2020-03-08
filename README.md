@@ -33,9 +33,7 @@ Bash (>= 4.4)
 1. play -> (run, login) -> stop
 1. init -> close
 1. acativate -> deactivate
-1. exe
-1. confirm
-1. help
+1. build -> verify
 
 ## Official Patterns
 ### First

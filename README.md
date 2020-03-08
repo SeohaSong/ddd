@@ -5,6 +5,7 @@
 ## Prerequisite
 ```
 Docker (...)
+Git (...)
 Bash (>= 4.4)
 ```
 

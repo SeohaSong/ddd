@@ -12,4 +12,8 @@ py)
     cd ..
     rm -r __tmp__
 ;;
+cpp)
+    shs run g++ $( ls *.cpp )
+    mv a.out $name
+;;
 esac

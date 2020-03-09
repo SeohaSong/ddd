@@ -6,7 +6,8 @@ py)
     mkdir __tmp__
     cp $file __tmp__
     cd __tmp__
-    import_opt='--hidden-import pkg_resources.py2_warn'
+    pkgs="pkg_resources.py2_warn"
+    for pkg in $pkgs; do import_opt="$import_opt --hidden-import $pkg"; done
     shs run pyinstaller --onefile $import_opt $file
     mv dist/$name ../$name
     cd ..

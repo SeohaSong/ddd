@@ -4,9 +4,11 @@
 
 ## Prerequisite
 ```
+Ubuntu (>=16.04)
 Docker (...)
 Git (...)
-Bash (>= 4.4)
+SSH (...)
+Bash (>=4.4)
 ```
 
 ## Description (Macro)

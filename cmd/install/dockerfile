@@ -29,7 +29,7 @@ RUN apt install --yes --no-install-recommends libnvinfer6=6.0.1-1+cuda10.1
 RUN apt install --yes --no-install-recommends libnvinfer-dev=6.0.1-1+cuda10.1
 RUN apt install --yes --no-install-recommends \
     libnvinfer-plugin6=6.0.1-1+cuda10.1
-ENV __TMP__=$LD_LIBRARY_PATH:\$LD_LIBRARY_PATH
+ENV __TMP__=/usr/local/cuda/compat:\$LD_LIBRARY_PATH
 RUN echo export LD_LIBRARY_PATH=$__TMP__ >> $__PRROFILE__
 ENV __TMP__=/usr/local/cuda/extras/CUPTI/lib64:\$LD_LIBRARY_PATH
 RUN echo export LD_LIBRARY_PATH=$__TMP__ >> $__PRROFILE__

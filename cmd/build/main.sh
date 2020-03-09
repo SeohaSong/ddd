@@ -1,5 +1,5 @@
 file=$ARGS
-[ -f $file ] && [ ! -z $file ]
+[[ -f $file && ! -z $file ]]
 name=${file%.*} ext=${file##*.}
 case $ext in
 py)

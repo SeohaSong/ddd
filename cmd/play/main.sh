@@ -3,6 +3,7 @@ if ! shs __is-wsl__; then net_opt='--network host'; fi
 $DDD docker run --detach --interactive --rm \
 $net_opt \
 --name ddd \
+--gpus all \
 --volume ${DDD_PATH#/mnt}:/home/ddd/${DDD_PATH##*/} ddd
 echo Port 2222 | $DDD docker exec --interactive --user root \
 ddd tee /etc/ssh/sshd_config

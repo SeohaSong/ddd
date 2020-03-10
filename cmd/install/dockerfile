@@ -13,7 +13,7 @@ RUN apt install --yes --no-install-recommends wget
 
 ENV __USER__=ddd
 ENV __HOME__=/home/$__USER__
-ENV __PRROFILE__=$__HOME__/.profile
+ENV __PRROFILE__=$__HOME__/.bashrc
 RUN echo '<KEY/>\n<KEY/>' | passwd
 RUN echo '<KEY/>\n<KEY/>' | adduser $__USER__
 RUN echo "$__USER__ ALL=(ALL:ALL) ALL" >> /etc/sudoers

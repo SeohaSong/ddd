@@ -1,0 +1,1 @@
+trap "$( cat $DDD_PATH/ddd/tools/common/trap.sh )" ERR

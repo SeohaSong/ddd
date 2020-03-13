@@ -50,13 +50,13 @@ Bash (>=4.4)
     (...+
      ....)
 ```
-### Third (Uncontinuous Form)
+### Third
 ```
     (
-    ...+
-    ....)
+        ...+
+        ....)
 ```
-### Fourth (Uncontinuous Form)
+### Fourth (Absolute Form)
 ```
     (
 ...+

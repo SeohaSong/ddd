@@ -9,17 +9,19 @@ RUN apt install --yes --no-install-recommends ssh
 RUN apt install --yes --no-install-recommends sudo
 RUN apt install --yes --no-install-recommends wget
 
+ENV __TMP__=/etc/ssh/ssh_config
+RUN cat $__TMP__ | grep -v ServerAliveInterval | tee ${__TMP__}_
+RUN mv ${__TMP__}_ $__TMP__
+RUN echo ServerAliveInterval 60 | tee -a $__TMP__
+
 ENV __USER__=ddd
 ENV __HOME__=/home/$__USER__
 ENV __PRROFILE__=$__HOME__/.bashrc
 RUN echo '<KEY/>\n<KEY/>' | passwd
 RUN echo '<KEY/>\n<KEY/>' | adduser $__USER__
 RUN echo "$__USER__ ALL=(ALL:ALL) ALL" >> /etc/sudoers
-
-ENV __TMP__=/etc/ssh/ssh_config
-RUN cat $__TMP__ | grep -v ServerAliveInterval | tee ${__TMP__}_
-RUN mv ${__TMP__}_ $__TMP__
-RUN echo ServerAliveInterval 60 | tee -a $__TMP__
+RUN echo "\$HOME/.local/bin:\$PATH" >> $__PRROFILE__
+ENV PATH=$__HOME__/.local/bin:$PATH
 
 
 # cuda
@@ -57,7 +59,6 @@ WORKDIR $__HOME__
 
 
 # python
-ENV PATH=$__HOME__/.local/bin:$PATH
 RUN pip install --upgrade pip 
 RUN pip install --upgrade setuptools
 RUN pip install --upgrade pandas
@@ -65,6 +66,7 @@ RUN pip install --upgrade pylint
 RUN pip install --upgrade jupyter
 RUN pip install --upgrade matplotlib
 RUN pip install --upgrade tensorflow
+RUN pip install --upgrade pycodestyle
 RUN pip install --upgrade pyinstaller
 
 

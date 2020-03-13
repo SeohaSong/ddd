@@ -1,2 +1,1 @@
-local user=$( whoami )
-[[ $user == ddd ]]
+[[ $( whoami ) == ddd ]]

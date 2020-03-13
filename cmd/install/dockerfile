@@ -3,8 +3,6 @@ FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu16.04
 
 # base
 RUN apt update --yes
-RUN apt upgrade --yes
-RUN apt autoremove --yes
 RUN apt install --yes --no-install-recommends vim
 RUN apt install --yes --no-install-recommends git
 RUN apt install --yes --no-install-recommends ssh
@@ -49,6 +47,9 @@ RUN wget https://ftp.gnu.org/gnu/bash/bash-4.4.tar.gz
 RUN tar --extract --verbose --file bash-4.4.tar.gz
 RUN cd bash-4.4 && ./configure && make && make install
 RUN rm -r bash-4.4*
+
+
+RUN apt autoremove --yes
 
 
 USER $__USER__

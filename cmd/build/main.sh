@@ -1,4 +1,4 @@
-file=$ARGS
+file=$1
 [[ -f $file && ! -z $file ]]
 name=${file%.*} ext=${file##*.}
 case $ext in

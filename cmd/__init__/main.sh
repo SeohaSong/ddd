@@ -1,4 +1,3 @@
-ARGS=$1
 OPTS='null'
 KEY=$( cat $DDD_PATH/env/KEY 2> /dev/null || echo ddd )
 cp $DDD_PATH/ddd/.gitignore $DDD_PATH

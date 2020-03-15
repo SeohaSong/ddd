@@ -1,1 +1,1 @@
-echo "[$DDD] \"$ARGS.\""
+echo "[$DDD] \"$@.\""

@@ -3,7 +3,7 @@ if [[ $PWD != $DDD_PATH && $PWD =~ $DDD_PATH ]]; then
     path=${PWD#$DDD_PATH/}; fi
 ssh ddd@localhost -t -p 2222 "
     . .profile
-    . $name/ddd/cmd.sh
+    . $name/ddd/cmd.sh > /dev/null
     cd $name/$path
     bash"
 # key toss

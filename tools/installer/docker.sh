@@ -1,10 +1,9 @@
 (
-    sudo apt install --yes --no-install-recommends \
-    curl \
-    gnupg-agent \
-    ca-certificates \
-    apt-transport-https \
-    software-properties-common
+    sudo apt install --yes --no-install-recommends curl
+    sudo apt install --yes --no-install-recommends gnupg-agent
+    sudo apt install --yes --no-install-recommends ca-certificates
+    sudo apt install --yes --no-install-recommends apt-transport-https
+    sudo apt install --yes --no-install-recommends software-properties-common
 
     url=https://download.docker.com/linux/ubuntu
     curl -fsSL $url/gpg | sudo apt-key add -

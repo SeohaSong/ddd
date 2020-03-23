@@ -6,4 +6,3 @@ ssh ddd@localhost -t -p 2222 "
     . $name/ddd/cmd.sh > /dev/null
     cd $name/$path
     bash"
-# key toss

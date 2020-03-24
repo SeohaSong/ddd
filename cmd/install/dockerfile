@@ -1,7 +1,7 @@
 FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu16.04
 
 
-# base
+# root
 RUN apt update --yes
 RUN apt install --yes --no-install-recommends vim
 RUN apt install --yes --no-install-recommends git
@@ -20,27 +20,6 @@ ENV __PRROFILE__=$__HOME__/.bashrc
 RUN echo '<KEY/>\n<KEY/>' | passwd
 RUN echo '<KEY/>\n<KEY/>' | adduser $__USER__
 RUN echo "$__USER__ ALL=(ALL:ALL) ALL" >> /etc/sudoers
-RUN echo 'export PATH=$HOME/.local/bin:$PATH' >> $__PRROFILE__
-ENV PATH=$__HOME__/.local/bin:$PATH
-
-
-# cuda
-RUN apt install --yes --no-install-recommends libnvinfer6=6.0.1-1+cuda10.1
-RUN apt install --yes --no-install-recommends libnvinfer-dev=6.0.1-1+cuda10.1
-RUN apt install --yes --no-install-recommends \
-    libnvinfer-plugin6=6.0.1-1+cuda10.1
-ENV __TMP__=/usr/local/cuda/compat:\$LD_LIBRARY_PATH
-RUN echo export LD_LIBRARY_PATH=$__TMP__ >> $__PRROFILE__
-ENV __TMP__=/usr/local/cuda/extras/CUPTI/lib64:\$LD_LIBRARY_PATH
-RUN echo export LD_LIBRARY_PATH=$__TMP__ >> $__PRROFILE__
-RUN echo export PATH=/usr/local/cuda/bin:\$PATH >> $__PRROFILE__
-
-
-# python
-RUN apt install --yes --no-install-recommends python3-dev
-RUN apt install --yes --no-install-recommends python3-pip
-RUN ln --symbolic $( which python3 ) /usr/bin/python
-RUN ln --symbolic $( which pip3 ) /usr/bin/pip
 
 
 # bash
@@ -50,11 +29,27 @@ RUN cd bash-4.4 && ./configure && make && make install
 RUN rm -r bash-4.4*
 
 
-# Context Change
+# cuda
+RUN apt install --yes --no-install-recommends libnvinfer6=6.0.1-1+cuda10.1
+RUN apt install --yes --no-install-recommends libnvinfer-dev=6.0.1-1+cuda10.1
+RUN apt install --yes --no-install-recommends \
+    libnvinfer-plugin6=6.0.1-1+cuda10.1
+
+
+# python
+RUN apt install --yes --no-install-recommends python3-dev
+RUN apt install --yes --no-install-recommends python3-pip
+RUN ln --symbolic $( which python3 ) /usr/bin/python
+RUN ln --symbolic $( which pip3 ) /usr/bin/pip
+
+
+# user
 RUN apt autoremove --yes
 
 USER $__USER__
 WORKDIR $__HOME__
+
+ENV PATH=$__HOME__/.local/bin:$PATH
 
 
 # python
@@ -70,26 +65,30 @@ RUN pip install --upgrade pyinstaller
 
 
 # node
-ENV __DNAME__=node
 ENV __VER__=12.16.1
 ENV __NAME__=node-v$__VER__-linux-x64.tar.xz
-ENV __URL__=https://nodejs.org/dist/v$__VER__/$__NAME__
-RUN wget $__URL__
+RUN wget https://nodejs.org/dist/v$__VER__/$__NAME__
 RUN tar --extract --verbose --file $__NAME__
 RUN rm $__NAME__
-RUN mv ${__NAME__%.tar.xz} $__DNAME__
-RUN echo export PATH=\$HOME/$__DNAME__/bin:\$PATH >> $__PRROFILE__
+RUN mv ${__NAME__%.tar.xz} node
 
-ENV PATH=$__HOME__/$__DNAME__/bin:$PATH
+ENV PATH=$__HOME__/node/bin:$PATH
 RUN npm install --global npm
 RUN npm install --global @angular/cli
 
 
 # ddd
-RUN echo export PYTHONPATH >> $__PRROFILE__
+RUN echo '\
+PATH=$HOME/node/bin:$PATH\n\
+PATH=/usr/local/cuda/bin:$PATH\n\
+PATH=$HOME/.local/bin:$PATH\n\
+export LD_LIBRARY_PATH\n\
+LD_LIBRARY_PATH=/usr/local/cuda/compat:$LD_LIBRARY_PATH\n\
+LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH\n\
+export PYTHONPATH\n\
+PYTHONPATH=$HOME/<DDD_PATH/>/ddd/tools/python:$PYTHONPATH\n\
+PYTHONPATH=$HOME/<DDD_PATH/>/tools/python:$PYTHONPATH\n\
+. $HOME/<DDD_PATH/>/ddd/cmd.sh __profile__' >> $__PRROFILE__
+
 ENV PYTHONPATH=$__HOME__/<DDD_PATH/>/ddd/tools/python:$PYTHONPATH
 ENV PYTHONPATH=$__HOME__/<DDD_PATH/>/tools/python:$PYTHONPATH
-RUN echo '\
-PYTHONPATH=$HOME/<DDD_PATH/>/ddd/tools/python:$PYTHONPATH\n\
-PYTHONPATH=$HOME/<DDD_PATH/>/tools/python:$PYTHONPATH' >> $__PRROFILE__
-RUN echo '. $HOME/<DDD_PATH/>/ddd/cmd.sh __profile__' >> $__PRROFILE__

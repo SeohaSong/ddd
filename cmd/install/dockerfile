@@ -20,7 +20,7 @@ ENV __PRROFILE__=$__HOME__/.bashrc
 RUN echo '<KEY/>\n<KEY/>' | passwd
 RUN echo '<KEY/>\n<KEY/>' | adduser $__USER__
 RUN echo "$__USER__ ALL=(ALL:ALL) ALL" >> /etc/sudoers
-RUN echo "export PATH=\$HOME/.local/bin:\$PATH" >> $__PRROFILE__
+RUN echo 'export PATH=$HOME/.local/bin:$PATH' >> $__PRROFILE__
 ENV PATH=$__HOME__/.local/bin:$PATH
 
 
@@ -83,3 +83,13 @@ RUN echo export PATH=\$HOME/$__DNAME__/bin:\$PATH >> $__PRROFILE__
 ENV PATH=$__HOME__/$__DNAME__/bin:$PATH
 RUN npm install --global npm
 RUN npm install --global @angular/cli
+
+
+# ddd
+RUN echo export PYTHONPATH >> $__PRROFILE__
+ENV PYTHONPATH=$__HOME__/<DDD_PATH/>/ddd/tools/python:$PYTHONPATH
+ENV PYTHONPATH=$__HOME__/<DDD_PATH/>/tools/python:$PYTHONPATH
+RUN echo '\
+PYTHONPATH=$HOME/<DDD_PATH/>/ddd/tools/python:$PYTHONPATH\n\
+PYTHONPATH=$HOME/<DDD_PATH/>/tools/python:$PYTHONPATH' >> $__PRROFILE__
+RUN echo '. $HOME/<DDD_PATH/>/ddd/cmd.sh __profile__' >> $__PRROFILE__

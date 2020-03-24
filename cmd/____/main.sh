@@ -1,9 +1,10 @@
-local path lines afile str txt
-
 export CLICOLOR=1
+
+local lines
 lines=$( echo "${PATH//':'/$'\n'}" | sort | uniq )
 PATH=${lines//$'\n'/':'}
 
+local afile str txt
 afile=$HOME/.bashrc
 str=". \$HOME/${DDD_PATH##*/}/ddd/cmd.sh __profile__"
 txt=$( cat $afile | grep -v "$str" )
@@ -11,6 +12,7 @@ echo "\
 $txt
 $str" > $afile
 
+local path 
 cp $DDD_PATH/ddd/.gitignore $DDD_PATH
 for path in data cmd env tools; do
     path=$DDD_PATH/$path

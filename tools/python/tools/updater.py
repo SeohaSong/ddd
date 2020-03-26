@@ -18,8 +18,10 @@ def preprocess(file_, tmp_file):
     proc = re.compile(r"^utt \(.+\) process Time: .+")
     num_proc = re.compile(r".+ ([0-9.]+)ms$")
     name2idx = {v: header.index(v) for v in header}
+    stop_str = "Could not handle json request from client.."
     for row in rows:
-        while lines[idx].find("\"" + row[name2idx['Utterance']] + "\"") < 0:
+
+        while lines[idx].find("\"%s\"" % row[name2idx['Utterance']]) < 0:
             idx += 1
         if row[name2idx['eNLUResult']] == 'NULL':
             infos.append(('EMPTY', 'EMPTY'))
@@ -31,12 +33,15 @@ def preprocess(file_, tmp_file):
                 idx += 1
             vid = lines[idx].split()[2]
             infos.append((vid, dom))
-        str_ = "Could not handle json request from client.."
-        if lines[idx + 1].find(str_) >= 0:
-            nums.append(0.0)
-        else:
-            while not proc.match(lines[idx]):
-                idx += 1
+            
+        chk_stop = -1
+        while not proc.match(lines[idx]):
+            chk_stop = lines[idx].find(stop_str)
+            if chk_stop >= 0:
+                nums.append(0.0)
+                break
+            idx += 1
+        if chk_stop < 0:
             nums.append(float(num_proc.match(lines[idx]).group(1)))
 
     return header, rows, nums, infos

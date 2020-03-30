@@ -12,8 +12,9 @@ echo "\
 $txt
 $str" > $afile
 
-local path 
 cp $DDD_PATH/ddd/.gitignore $DDD_PATH
+
+local path 
 for path in data cmd env tools; do
     path=$DDD_PATH/$path
     if [ ! -d $path ]; then mkdir $path; fi

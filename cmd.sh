@@ -9,8 +9,8 @@ main() {
     local DDD=$( cat $DDD_PATH/env/DDD 2> /dev/null || echo ddd )
     eval "$DDD() { . $DDD_PATH/ddd/cmd.sh \$@; } && export -f $DDD"
     if [[ -z $CHK ]]; then local CHK=$DDD && $DDD ____; fi
-    local file=$DDD_PATH/ddd/cmd/$arg/main.sh
-    if [ ! -f $file ]; then file=$DDD_PATH/cmd/$arg/main.sh; fi
+    local file=$DDD_PATH/cmd/$arg/main.sh
+    if [ ! -f $file ]; then file=$DDD_PATH/ddd/cmd/$arg/main.sh; fi
     if [ ! -f $file ]; then $DDD help; else
         local cmd=". $file $nxt_args"
         if [ -z "$nxt_args" ]; then cmd=". $file ''"; fi

@@ -4,13 +4,15 @@ local lines
 lines=$( echo "${PATH//':'/$'\n'}" | sort | uniq )
 PATH=${lines//$'\n'/':'}
 
-local afile str txt
-afile=$HOME/.bashrc
-str=". \$HOME/${DDD_PATH##*/}/ddd/cmd.sh __profile__"
-txt=$( cat $afile | grep -v "$str" )
-echo "\
-$txt
-$str" > $afile
+if false; then
+    local afile str txt
+    afile=$HOME/.bashrc
+    str=". \$HOME/${DDD_PATH##*/}/ddd/cmd.sh __profile__"
+    txt=$( cat $afile | grep -v "$str" )
+    echo "\
+    $txt
+    $str" > $afile
+fi
 
 cp $DDD_PATH/ddd/.gitignore $DDD_PATH
 

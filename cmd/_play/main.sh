@@ -8,5 +8,5 @@ if [[ $name == ddd ]]; then etc_opt="--detach"; fi
 $DDD docker run \
     $gpu_opt $net_opt $name_opt $etc_opt \
     --interactive --rm \
-    --workdir /home/ddd/${DDD_PATH##*/}/$path \
-    --volume ${DDD_PATH#/mnt}:/home/ddd/${DDD_PATH##*/} $@
+    --workdir /home/ddd/AGENT/$path \
+    --volume ${DDD_PATH#/mnt}:/home/ddd/AGENT $@

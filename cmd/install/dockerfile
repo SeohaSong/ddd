@@ -84,12 +84,12 @@ export LD_LIBRARY_PATH\n\
 LD_LIBRARY_PATH=/usr/local/cuda/compat:$LD_LIBRARY_PATH\n\
 LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH\n\
 export PYTHONPATH\n\
-PYTHONPATH=$HOME/<DDD_PATH/>/ddd/tools/python:$PYTHONPATH\n\
-PYTHONPATH=$HOME/<DDD_PATH/>/tools/python:$PYTHONPATH\n\
-. $HOME/<DDD_PATH/>/ddd/cmd.sh __profile__' >> $__HOME__/.bashrc
+PYTHONPATH=$HOME/AGENT/ddd/tools/python:$PYTHONPATH\n\
+PYTHONPATH=$HOME/AGENT/tools/python:$PYTHONPATH\n\
+. $HOME/AGENT/ddd/cmd.sh __profile__' >> $__HOME__/.bashrc
 
 RUN mkdir $__HOME__/.ssh
 RUN echo '<KEY/>' > $__HOME__/.ssh/authorized_keys
 
-ENV PYTHONPATH=$__HOME__/<DDD_PATH/>/ddd/tools/python:$PYTHONPATH
-ENV PYTHONPATH=$__HOME__/<DDD_PATH/>/tools/python:$PYTHONPATH
+ENV PYTHONPATH=$__HOME__/AGENT/ddd/tools/python:$PYTHONPATH
+ENV PYTHONPATH=$__HOME__/AGENT/tools/python:$PYTHONPATH

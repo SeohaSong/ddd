@@ -8,6 +8,7 @@ RUN apt install --yes --no-install-recommends git
 RUN apt install --yes --no-install-recommends ssh
 RUN apt install --yes --no-install-recommends sudo
 RUN apt install --yes --no-install-recommends wget
+RUN apt install --yes --no-install-recommends software-properties-common
 
 ENV __TMP__=/etc/ssh/ssh_config
 RUN cat $__TMP__ | grep -v ServerAliveInterval | tee ${__TMP__}_
@@ -22,6 +23,7 @@ RUN echo "ddd ALL=(ALL:ALL) ALL" >> /etc/sudoers
 # bash
 RUN wget https://ftp.gnu.org/gnu/bash/bash-4.4.tar.gz
 RUN tar --extract --verbose --file bash-4.4.tar.gz
+
 RUN cd bash-4.4 && ./configure && make && make install
 RUN rm -r bash-4.4*
 
@@ -36,8 +38,17 @@ RUN apt install --yes --no-install-recommends \
 # python
 RUN apt install --yes --no-install-recommends python3-dev
 RUN apt install --yes --no-install-recommends python3-pip
+
 RUN ln --symbolic $( which python3 ) /usr/bin/python
 RUN ln --symbolic $( which pip3 ) /usr/bin/pip
+
+
+# java
+RUN add-apt-repository ppa:cwchien/gradle
+RUN apt update -y
+RUN apt install --yes --no-install-recommends gradle-5.6.4
+
+RUN apt install --yes --no-install-recommends default-jdk
 
 
 # user
@@ -86,7 +97,7 @@ LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH\n\
 export PYTHONPATH\n\
 PYTHONPATH=$HOME/AGENT/ddd/tools/python:$PYTHONPATH\n\
 PYTHONPATH=$HOME/AGENT/tools/python:$PYTHONPATH\n\
-. $HOME/AGENT/ddd/cmd.sh __profile__' >> $__HOME__/.bashrc
+. $HOME/AGENT/ddd/cmd.sh profile' >> $__HOME__/.bashrc
 
 RUN mkdir $__HOME__/.ssh
 RUN echo '<KEY/>' > $__HOME__/.ssh/authorized_keys

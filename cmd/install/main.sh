@@ -5,7 +5,8 @@ cd $apath
 if [ -d __tmp__ ]; then rm -rf __tmp__; fi
 mkdir __tmp__
 file=__tmp__/dockerfile
-txt=$( cat dockerfile )
+cp dockerfile $file
+txt=$( cat $file )
 echo "$txt" | sed -e "s~<KEY\/>~$KEY~g" | tee $file
 txt=$( cat $file )
 echo "$txt" | sed -e "s/<PASSWORD\/>/$PASSWORD/g" | tee $file

@@ -43,14 +43,6 @@ RUN ln --symbolic $( which python3 ) /usr/bin/python
 RUN ln --symbolic $( which pip3 ) /usr/bin/pip
 
 
-# java
-RUN add-apt-repository ppa:cwchien/gradle
-RUN apt update -y
-RUN apt install --yes --no-install-recommends gradle-5.6.4
-
-RUN apt install --yes --no-install-recommends default-jdk
-
-
 # user
 RUN apt autoremove --yes
 
@@ -88,6 +80,7 @@ RUN npm install --global @angular/cli
 
 # ddd
 RUN echo '\
+export LC_ALL=C.UTF-8\n\
 PATH=$HOME/node/bin:$PATH\n\
 PATH=/usr/local/cuda/bin:$PATH\n\
 PATH=$HOME/.local/bin:$PATH\n\
@@ -99,8 +92,9 @@ PYTHONPATH=$HOME/AGENT/ddd/tools/python:$PYTHONPATH\n\
 PYTHONPATH=$HOME/AGENT/tools/python:$PYTHONPATH\n\
 . $HOME/AGENT/ddd/cmd.sh profile' >> $__HOME__/.bashrc
 
-RUN mkdir $__HOME__/.ssh
-RUN echo '<KEY/>' > $__HOME__/.ssh/authorized_keys
-
+ENV LC_ALL=C.UTF-8
 ENV PYTHONPATH=$__HOME__/AGENT/ddd/tools/python:$PYTHONPATH
 ENV PYTHONPATH=$__HOME__/AGENT/tools/python:$PYTHONPATH
+
+RUN mkdir $__HOME__/.ssh
+RUN echo '<KEY/>' > $__HOME__/.ssh/authorized_keys

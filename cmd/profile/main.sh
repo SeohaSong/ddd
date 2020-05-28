@@ -1,7 +1,6 @@
 local afile=$HOME/.bashrc
-local str_="ddd/cmd.sh profile"
-local str=". $DDD_PATH/$str"
+local str="ddd/cmd.sh profile"
 local txt=$( cat $afile | grep -v "$str" )
 echo "\
 $txt
-$str" > $afile
+. $DDD_PATH/$str" > $afile

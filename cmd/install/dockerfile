@@ -8,6 +8,7 @@ RUN apt install --yes --no-install-recommends git
 RUN apt install --yes --no-install-recommends ssh
 RUN apt install --yes --no-install-recommends sudo
 RUN apt install --yes --no-install-recommends wget
+RUN apt install --yes --no-install-recommends cmake
 RUN apt install --yes --no-install-recommends software-properties-common
 
 ENV __TMP__=/etc/ssh/ssh_config

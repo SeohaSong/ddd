@@ -43,31 +43,32 @@ RUN apt install --yes --no-install-recommends python3-pip
 RUN ln --symbolic $( which python3 ) /usr/bin/python
 RUN ln --symbolic $( which pip3 ) /usr/bin/pip
 
-
-# user
 RUN apt autoremove --yes
 
-USER ddd
+
+# user
 ENV __HOME__=/home/ddd
+
+USER ddd
 WORKDIR $__HOME__
 
 ENV PATH=$__HOME__/.local/bin:$PATH
 
 
 # python
-RUN pip install --upgrade pip 
-RUN pip install --upgrade setuptools
-RUN pip install --upgrade pandas
-RUN pip install --upgrade pylint
-RUN pip install --upgrade jupyter
-RUN pip install --upgrade matplotlib
-RUN pip install --upgrade tensorflow
-RUN pip install --upgrade pycodestyle
-RUN pip install --upgrade pyinstaller
-
+RUN python -m pip install --upgrade pip 
+RUN python -m pip install --upgrade setuptools
+RUN python -m pip install --upgrade pandas
+RUN python -m pip install --upgrade pylint
+RUN python -m pip install --upgrade jupyter
+RUN python -m pip install --upgrade matplotlib
+RUN python -m pip install --upgrade tensorflow
+RUN python -m pip install --upgrade pycodestyle
+RUN python -m pip install --upgrade pyinstaller
+RUN python -m pip install --upgrade scikit-learn
 
 # node
-ENV __VER__=12.16.1
+ENV __VER__=12.17.0
 ENV __NAME__=node-v$__VER__-linux-x64.tar.xz
 RUN wget https://nodejs.org/dist/v$__VER__/$__NAME__
 RUN tar --extract --verbose --file $__NAME__
@@ -80,21 +81,16 @@ RUN npm install --global @angular/cli
 
 
 # ddd
-RUN echo '\
+RUN echo "\
 export LC_ALL=C.UTF-8\n\
-PATH=$HOME/node/bin:$PATH\n\
-PATH=/usr/local/cuda/bin:$PATH\n\
-PATH=$HOME/.local/bin:$PATH\n\
-export LD_LIBRARY_PATH\n\
-LD_LIBRARY_PATH=/usr/local/cuda/compat:$LD_LIBRARY_PATH\n\
-LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH\n\
-export PYTHONPATH\n\
-PYTHONPATH=$HOME/DDD/ddd/tools/python:$PYTHONPATH\n\
-. $HOME/DDD/ddd/cmd.sh profile' >> $__HOME__/.bashrc
+export PATH=/usr/local/cuda/bin:$HOME/node/bin:$HOME/.local/bin:$PATH\n\
+export LD_LIBRARY_PATH=/usr/local/cuda/compat:\$LD_LIBRARY_PATH\n\
+LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib64:\$LD_LIBRARY_PATH\n\
+export PYTHONPATH=$HOME/DDD/ddd/tools/python:\$PYTHONPATH\n\
+. $HOME/DDD/ddd/cmd.sh profile" >> $__HOME__/.bashrc
 
 ENV LC_ALL=C.UTF-8
 ENV PYTHONPATH=$__HOME__/DDD/ddd/tools/python:$PYTHONPATH
-ENV PYTHONPATH=$__HOME__/DDD/tools/python:$PYTHONPATH
 
 RUN mkdir $__HOME__/.ssh
 RUN echo '<KEY/>' > $__HOME__/.ssh/authorized_keys

@@ -14,7 +14,5 @@ py)
 ;;
 cpp)
     $DDD run g++ -std=c++11 $( ls *.cpp )
-    ./a.out
-    rm a.out
 ;;
 esac

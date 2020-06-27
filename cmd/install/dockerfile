@@ -77,7 +77,7 @@ RUN mv ${__NAME__%.tar.xz} node
 
 ENV PATH=$__HOME__/node/bin:$PATH
 RUN npm install --global npm
-RUN npm install --global @angular/cli
+RUN npm install --global @ionic/cli
 
 
 # ddd

@@ -1,3 +1,4 @@
-path=${PWD#$DDD_PATH/}
-if [[ $PWD == $DDD_PATH || ! $PWD =~ $DDD_PATH ]]; then path=.; fi
-ssh ddd@127.0.0.1 -t -p 2222 "cd DDD/$path && bash"
+local opt=
+if [[ -t 1 ]]; then
+    opt='--tty --interactive'; fi
+$DDD docker exec $opt --workdir /home/ddd/DDD/${PWD#$DDD_PATH} ddd bash

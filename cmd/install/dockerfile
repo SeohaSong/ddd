@@ -1,4 +1,4 @@
-FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu16.04
+FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu18.04
 
 
 # root
@@ -68,7 +68,7 @@ RUN python -m pip install --upgrade pyinstaller
 RUN python -m pip install --upgrade scikit-learn
 
 # node
-ENV __VER__=12.17.0
+ENV __VER__=12.18.1
 ENV __NAME__=node-v$__VER__-linux-x64.tar.xz
 RUN wget https://nodejs.org/dist/v$__VER__/$__NAME__
 RUN tar --extract --verbose --file $__NAME__
@@ -94,3 +94,9 @@ ENV PYTHONPATH=$__HOME__/DDD/ddd/tools/python:$PYTHONPATH
 
 RUN mkdir $__HOME__/.ssh
 RUN echo '<KEY/>' > $__HOME__/.ssh/authorized_keys
+
+wget https://nodejs.org/dist/v12.18.1/node-v12.18.1-linux-x64.tar.xz
+tar --extract --verbose --file node-v12.18.1-linux-x64.tar.xz
+rm node-v12.18.1-linux-x64.tar.xz
+mv node-v12.18.1-linux-x64 node
+export PATH=$PWD/node/bin:$PATH

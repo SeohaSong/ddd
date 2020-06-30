@@ -68,6 +68,7 @@ RUN mv ${__NAME__%.tar.xz} node
 ENV PATH=$__HOME__/node/bin:$PATH
 RUN npm install --global npm
 RUN npm install --global @ionic/cli
+RUN yes | ionic start app tabs --type=react
 
 # ddd
 RUN echo "\

@@ -1,4 +1,5 @@
-FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu18.04
+FROM ubuntu:18.04
+# FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu18.04
 
 
 # root
@@ -30,13 +31,16 @@ RUN echo "ddd ALL=(ALL:ALL) ALL" >> /etc/sudoers
 RUN apt install --yes --no-install-recommends python3-dev
 RUN apt install --yes --no-install-recommends python3-pip
 
-RUN ln --symbolic $( which python3 ) /usr/bin/python
+RUN ln --symbolic $( wh
+RUN python -m pip install --upgrade setuich python3 ) /usr/bin/python
 RUN ln --symbolic $( which pip3 ) /usr/bin/pip
+
+#java
+RUN apt install --yes --no-install-recommends default-jdk
+
 
 RUN apt autoremove --yes
 
-
-# user
 ENV __HOME__=/home/ddd
 
 USER ddd
@@ -46,8 +50,7 @@ ENV PATH=$__HOME__/.local/bin:$PATH
 
 
 # python
-RUN python -m pip install --upgrade pip 
-RUN python -m pip install --upgrade setuptools
+RUN python -m pip install --upgrade pip ptools
 RUN python -m pip install --upgrade pandas
 RUN python -m pip install --upgrade pylint
 RUN python -m pip install --upgrade jupyter
@@ -69,6 +72,7 @@ ENV PATH=$__HOME__/node/bin:$PATH
 RUN npm install --global npm
 RUN npm install --global @ionic/cli
 RUN yes | ionic start app tabs --type=react
+
 
 # ddd
 RUN echo "\

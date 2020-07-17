@@ -1,16 +1,23 @@
 FROM ubuntu:18.04
 # FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu18.04
 
-
-# root
 RUN apt update --yes
 RUN apt install --yes --no-install-recommends vim
 RUN apt install --yes --no-install-recommends git
 RUN apt install --yes --no-install-recommends ssh
+RUN apt install --yes --no-install-recommends g++
+RUN apt install --yes --no-install-recommends make
 RUN apt install --yes --no-install-recommends sudo
 RUN apt install --yes --no-install-recommends wget
 RUN apt install --yes --no-install-recommends cmake
+RUN apt install --yes --no-install-recommends xz-utils
 RUN apt install --yes --no-install-recommends software-properties-common
+
+# RUN apt install --yes --no-install-recommends libnvinfer6=6.0.1-1+cuda10.1
+# RUN apt install --yes --no-install-recommends libnvinfer-dev=6.0.1-1+cuda10.1
+# RUN apt install --yes --no-install-recommends \
+#     libnvinfer-plugin6=6.0.1-1+cuda10.1
+
 
 ENV __TMP__=/etc/ssh/ssh_config
 RUN cat $__TMP__ | grep -v ServerAliveInterval | tee ${__TMP__}_
@@ -21,36 +28,28 @@ RUN echo '<PASSWORD/>\n<PASSWORD/>' | passwd
 RUN echo '<PASSWORD/>\n<PASSWORD/>' | adduser ddd
 RUN echo "ddd ALL=(ALL:ALL) ALL" >> /etc/sudoers
 
-# # cuda
-# RUN apt install --yes --no-install-recommends libnvinfer6=6.0.1-1+cuda10.1
-# RUN apt install --yes --no-install-recommends libnvinfer-dev=6.0.1-1+cuda10.1
-# RUN apt install --yes --no-install-recommends \
-#     libnvinfer-plugin6=6.0.1-1+cuda10.1
 
-# python
 RUN apt install --yes --no-install-recommends python3-dev
 RUN apt install --yes --no-install-recommends python3-pip
 
-RUN ln --symbolic $( wh
-RUN python -m pip install --upgrade setuich python3 ) /usr/bin/python
+RUN ln --symbolic $( which python3 ) /usr/bin/python
 RUN ln --symbolic $( which pip3 ) /usr/bin/pip
 
-#java
+
 RUN apt install --yes --no-install-recommends default-jdk
 
 
 RUN apt autoremove --yes
 
-ENV __HOME__=/home/ddd
-
 USER ddd
-WORKDIR $__HOME__
 
+ENV __HOME__=/home/ddd
+WORKDIR $__HOME__
 ENV PATH=$__HOME__/.local/bin:$PATH
 
 
-# python
-RUN python -m pip install --upgrade pip ptools
+RUN python -m pip install --upgrade pip 
+RUN python -m pip install --upgrade setuptools
 RUN python -m pip install --upgrade pandas
 RUN python -m pip install --upgrade pylint
 RUN python -m pip install --upgrade jupyter
@@ -60,7 +59,7 @@ RUN python -m pip install --upgrade pycodestyle
 RUN python -m pip install --upgrade pyinstaller
 RUN python -m pip install --upgrade scikit-learn
 
-# node
+
 ENV __VER__=12.18.1
 ENV __NAME__=node-v$__VER__-linux-x64.tar.xz
 RUN wget https://nodejs.org/dist/v$__VER__/$__NAME__
@@ -74,7 +73,6 @@ RUN npm install --global @ionic/cli
 RUN yes | ionic start app tabs --type=react
 
 
-# ddd
 RUN echo "\
 export LC_ALL=C.UTF-8\n\
 export PATH=/usr/local/cuda/bin:$HOME/node/bin:$HOME/.local/bin:$PATH\n\

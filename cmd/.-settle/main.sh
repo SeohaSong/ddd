@@ -1,12 +1,16 @@
 main()
 {
     file=$PWD/ddd/cmd.sh
+    echo $DDD_PATH
     if [[ -f $file && $PWD != $DDD_PATH ]]
     then
+        echo 1
+        unset DDD
         . $file
-        return
+    else
+        echo 2
+        $DDD help
     fi
-    $DDD help
 }
 
 main

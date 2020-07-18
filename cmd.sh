@@ -12,7 +12,6 @@ main() {
     DDD=${DDD:-"ddd"}
     eval "$DDD() { . $DDD_PATH/ddd/cmd.sh \$@; } && export -f $DDD"
 
-
     if [[ -z $arg ]]
     then
         arg=.-settle
@@ -48,6 +47,7 @@ main() {
         cmd="( $init && $cmd 2>&1 ) 2> /dev/null"
     fi
     cmd="$set && $cmd"
+    echo $cmd
     eval "$cmd"
 }
 

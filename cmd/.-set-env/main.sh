@@ -6,7 +6,6 @@ main()
     export PATH=${paths//$'\n'/':'}
 
     cp $DDD_PATH/ddd/.gitignore $DDD_PATH
-
     echo $DDD | tee $DDD_PATH/env/DDD > /dev/null
 
     local path

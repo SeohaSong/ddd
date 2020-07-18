@@ -14,7 +14,13 @@ main() {
 
     local set=":"
     local init=":"
+
+    if [[ -z $arg ]]
+    then
+        arg=.-settle
+    fi
     local file=$DDD_PATH/cmd/$arg/main.sh
+
     if [[ -z $CHK ]]
     then
         set="$set && $DDD .-set-env"

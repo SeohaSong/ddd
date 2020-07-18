@@ -30,6 +30,8 @@ main()
             touch $path/main.sh
         fi
     done
+
+    alias gogo="cd $DDD_PATH"
 }
 
 main

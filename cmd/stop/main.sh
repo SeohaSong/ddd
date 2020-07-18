@@ -1,1 +1,0 @@
-$DDD docker stop ddd

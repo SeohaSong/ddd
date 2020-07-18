@@ -1,3 +1,3 @@
-local docker="sudo docker"
-if $DDD __is-wsl__; then docker=docker.exe; fi
-$docker $@
+cmd="sudo docker"
+if $DDD .is-wsl; then docker=docker.exe; fi
+$cmd $@

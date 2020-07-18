@@ -1,18 +1,16 @@
+#!/bin/bash
+
 main() {
     local args=( $@ )
     local arg=${args[0]}
-    local nxt_args=${args[@]:1}
+    args=${args[@]:1}
+    args=${args:-"''"}
+
+    local CHK=$DDD
     local DDD_PATH=$( dirname $( cd $( dirname $BASH_SOURCE ) && pwd ) )
     local DDD=$( cat $DDD_PATH/env/DDD 2> /dev/null )
     DDD=${DDD:-"ddd"}
     eval "$DDD() { . $DDD_PATH/ddd/cmd.sh \$@; } && export -f $DDD"
-
-    if [[ -z $CHK ]]
-    then
-        local CHK=$DDD
-        $DDD ____
-        $DDD _____
-    fi
 
     local file=$DDD_PATH/cmd/$arg/main.sh
     if [ ! -f $file ]
@@ -21,22 +19,25 @@ main() {
     fi
     if [ ! -f $file ]
     then
-        $DDD help
-        return $?
+        arg=help
+        file=$DDD_PATH/ddd/cmd/$arg/main.sh
     fi
 
-    local cmd=". $file $nxt_args"
-    if [ -z "$nxt_args" ]
+    local set=":"
+    local init="$DDD .-trap"
+    if [[ -z $CHK ]]
     then
-        cmd=". $file ''"
+        set="$DDD .-set-env && $DDD .-set-env_"
+        init="$init && $DDD .-init $args && $DDD .-init_ $args"
     fi
-    if [[ ! "$arg" =~ ^__.*__$ ]]
+
+    local cmd=". $file $args"
+    if [[ ! "${arg#\.}" =~ ^- ]]
     then
-        cmd="$DDD __trap__; $cmd 2>&1"
-        cmd="( $DDD __init__ $nxt_args; $DDD __init___ $nxt_args; $cmd )"
-        cmd="$cmd 2> /dev/null"
+        cmd="( $init && $cmd 2>&1 ) 2> /dev/null"
     fi
-    eval $cmd
-    return $?
+    cmd="$set && $cmd"
+    eval "$cmd"
 }
+
 main $@

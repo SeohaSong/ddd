@@ -19,6 +19,7 @@ main() {
     fi
     if [ ! -f $file ]
     then
+        echo "$arg $args"
         arg=help
         file=$DDD_PATH/ddd/cmd/$arg/main.sh
     fi

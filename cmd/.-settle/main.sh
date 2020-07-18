@@ -1,9 +1,9 @@
 main()
 {
     file=$PWD/ddd/cmd.sh
-    if [[ -f $file ]]
+    if [[ -f $file && $PWD != $DDD_PATH ]]
     then
-        . $file help
+        . $file
         return
     fi
     $DDD help

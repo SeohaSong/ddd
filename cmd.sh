@@ -12,24 +12,28 @@ main() {
     DDD=${DDD:-"ddd"}
     eval "$DDD() { . $DDD_PATH/ddd/cmd.sh \$@; } && export -f $DDD"
 
-    local file=$DDD_PATH/cmd/$arg/main.sh
-    if [ ! -f $file ]
-    then
-        file=$DDD_PATH/ddd/cmd/$arg/main.sh
-    fi
-    if [ ! -f $file ]
-    then
-        echo "$arg $args"
-        arg=help
-        file=$DDD_PATH/ddd/cmd/$arg/main.sh
-    fi
-
     local set=":"
-    local init="$DDD .-trap"
+    local init=":"
+    local file=$DDD_PATH/cmd/$arg/main.sh
     if [[ -z $CHK ]]
     then
-        set="$DDD .-set-env && $DDD .-set-env_"
-        init="$init && $DDD .-init $args && $DDD .-init_ $args"
+        set="$set && $DDD .-set-env"
+        init="$init && $DDD .-init $args"
+        if [ -f $file ]
+        then
+            set="$set && $DDD .-set-env_"
+            init="$init && $DDD .-init_ $args"
+        fi
+    fi
+
+    if [ ! -f $file ]
+    then
+        file=$DDD_PATH/ddd/cmd/$arg/main.sh
+    fi
+    if [ ! -f $file ]
+    then
+        arg=help
+        file=$DDD_PATH/ddd/cmd/help/main.sh
     fi
 
     local cmd=". $file $args"
@@ -38,6 +42,9 @@ main() {
         cmd="( $init && $cmd 2>&1 ) 2> /dev/null"
     fi
     cmd="$set && $cmd"
+
+    echo $cmd
+
     eval "$cmd"
 }
 

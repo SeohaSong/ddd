@@ -47,7 +47,6 @@ main() {
         cmd="( $init && $cmd 2>&1 ) 2> /dev/null"
     fi
     cmd="$set && $cmd"
-    echo $cmd
     eval "$cmd"
 }
 

@@ -19,7 +19,7 @@ $DDD docker run $gpu_opt $net_opt $etc_opt \
                 --name $name \
                 --workdir /home/ddd/DDD/$path \
                 --volume ${DDD_PATH#"/mnt"}:/home/ddd/DDD \
-                $@
+                $name
 
 echo Port 2222 | \
     $DDD docker exec --interactive --user root ddd tee /etc/ssh/sshd_config

@@ -12,8 +12,6 @@ main() {
     DDD=${DDD:-"ddd"}
     eval "$DDD() { . $DDD_PATH/ddd/cmd.sh \$@; } && export -f $DDD"
 
-    local set=":"
-    local init=":"
 
     if [[ -z $arg ]]
     then
@@ -21,6 +19,8 @@ main() {
     fi
     local file=$DDD_PATH/cmd/$arg/main.sh
 
+    local set=":"
+    local init=":"
     if [[ -z $CHK ]]
     then
         set="$set && $DDD .-set-env"

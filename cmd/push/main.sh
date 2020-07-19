@@ -1,6 +1,6 @@
 [[ -d .git || -f .git ]]
 
-$DDD echo Update \'$( dirname $BASH_SOURCE )\' repo
+$DDD echo Update \'$PWD\' repo
 
 git checkout master
 git config user.email "tisutoo@gmail.com"

@@ -1,1 +1,1 @@
-[[ "$( cat /proc/version )" =~ Microsoft ]]
+[[ ! -z "$( which wsl.exe )" ]]

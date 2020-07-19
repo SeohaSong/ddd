@@ -31,6 +31,12 @@ main()
     done
 
     alias gogo="cd $DDD_PATH"
+
+    if [ -z "$( ps -ax | grep -v grep | grep sshd )" ]
+    then
+        sudo ssh-keygen -A
+        sudo service ssh restart
+    fi
 }
 
 main

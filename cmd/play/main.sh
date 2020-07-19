@@ -14,7 +14,7 @@ then
     net_opt='--network host'
 fi
 
-$DDD docker run $gpu_opt $net_opt $etc_opt \
+docker run $gpu_opt $net_opt $etc_opt \
                 --interactive --rm \
                 --name $name \
                 --workdir /home/ddd/DDD/$path \
@@ -22,5 +22,5 @@ $DDD docker run $gpu_opt $net_opt $etc_opt \
                 $name
 
 echo Port 2222 | \
-    $DDD docker exec --interactive --user root ddd tee /etc/ssh/sshd_config
-$DDD docker exec --user root ddd service ssh start
+    docker exec --interactive --user root ddd tee /etc/ssh/sshd_config
+docker exec --user root ddd service ssh start

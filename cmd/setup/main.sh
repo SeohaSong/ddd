@@ -22,6 +22,6 @@ then
     net_opt='--network host'
 fi
 
-$DDD docker build --tag ddd $net_opt __tmp__
+docker build --tag ddd $net_opt __tmp__
 
 rm -r __tmp__

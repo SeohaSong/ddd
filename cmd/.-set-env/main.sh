@@ -30,13 +30,17 @@ main()
         fi
     done
 
-    alias gogo="cd $DDD_PATH"
-
-    if [ -z "$( ps -ax | grep -v grep | grep sshd )" ]
+    if [[ ! -z "$( which docker )" ]]
     then
-        sudo ssh-keygen -A
-        sudo service ssh restart
+        if [[ -z "$( ps -ax | grep -v grep | grep sshd )" ]]
+        then
+            sudo ssh-keygen -A
+            sudo service ssh restart
+        fi
+        sudo usermod -aG docker $USER
     fi
+
+    alias gogo="cd $DDD_PATH"
 }
 
 main

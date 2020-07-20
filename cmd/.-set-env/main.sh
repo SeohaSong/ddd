@@ -5,8 +5,12 @@ main()
     local paths=$( echo "${PATH//':'/$'\n'}" | sort | uniq )
     export PATH=${paths//$'\n'/':'}
 
-    cp $DDD_PATH/ddd/.gitignore $DDD_PATH
     echo $DDD | tee $DDD_PATH/env/DDD > /dev/null
+
+    if [[ ! -f $DDD_PATH/.gitignore ]]
+    then
+        cp $DDD_PATH/ddd/.gitignore $DDD_PATH
+    fi
 
     local path
 
@@ -36,8 +40,8 @@ main()
         then
             sudo ssh-keygen -A
             sudo service ssh restart
+            sudo usermod -aG docker $USER
         fi
-        sudo usermod -aG docker $USER
     fi
 
     alias gogo="cd $DDD_PATH"

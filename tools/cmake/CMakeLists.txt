@@ -1,0 +1,38 @@
+cmake_minimum_required(VERSION 3.5)
+add_compile_options(-std=c++14 -fPIC)
+
+set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/env)
+
+include_directories(${CMAKE_CURRENT_LIST_DIR}/include)
+file(GLOB_RECURSE headers ${CMAKE_CURRENT_LIST_DIR}/src/*.h)
+foreach(header ${headers})
+    get_filename_component(path_ ${header} PATH)
+    include_directories(${path_})
+endforeach()
+
+get_filename_component(lib ${CMAKE_CURRENT_LIST_DIR} NAME)
+file(GLOB_RECURSE cpps ${CMAKE_CURRENT_LIST_DIR}/src/*.cpp)
+add_library(${lib} SHARED ${cpps})
+
+set(libs)
+file(GLOB paths_ ${CMAKE_CURRENT_LIST_DIR}/tools/cxx/*)
+foreach(path_ ${paths_})
+    get_filename_component(so ${path_} NAME)
+    include_directories(${path_}/include)
+    file(GLOB_RECURSE libs ${libs} ${path_}/env/*.so)
+    file(GLOB_RECURSE libs ${libs} ${path_}/env/*.a)
+endforeach()
+
+target_link_libraries(${lib} ${libs})
+install (TARGETS ${lib} LIBRARY DESTINATION .)
+
+file(GLOB_RECURSE app_cpps ${CMAKE_CURRENT_LIST_DIR}/app/*.cpp)
+if(NOT "${app_cpps}" STREQUAL "")
+    file(GLOB_RECURSE test_cpps ${CMAKE_CURRENT_LIST_DIR}/test/*.cpp)
+    add_executable(exe ${cpps} ${app_cpps} ${test_cpps})
+    target_link_libraries(exe ${libs})
+    target_link_libraries(exe pthread)
+    install (TARGETS exe DESTINATION .)
+endif()

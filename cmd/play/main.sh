@@ -18,7 +18,7 @@ docker run $gpu_opt $net_opt $etc_opt \
                 --interactive --rm \
                 --name $name \
                 --workdir /home/ddd/DDD/$path \
-                --volume ${DDD_PATH#"/mnt"}:/home/ddd/DDD \
+                --volume $DDD_PATH:/home/ddd/DDD \
                 $name
 
 echo Port 2222 | \

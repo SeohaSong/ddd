@@ -1,27 +1,20 @@
-[ ! -z "$KEY" ]
-[ ! -z "$PASSWORD" ]
+args=( $@ )
+arg=${args[0]}
+args=${args[@]:1}
+args=${args:-"''"}
 
-cd $( dirname $BASH_SOURCE )
-if [ -d __tmp__ ]
+path=$( dirname $BASH_SOURCE )
+file=$path/$arg/main.sh
+
+if [[ -z $arg || ! -f $file ]]
 then
-    rm -rf __tmp__
-fi
-mkdir __tmp__
-
-file=__tmp__/dockerfile
-cp dockerfile $file
-txt=$( cat $file )
-echo "$txt" | sed -e "s~<KEY\/>~$KEY~g" | tee $file
-txt=$( cat $file )
-echo "$txt" | sed -e "s/<PASSWORD\/>/$PASSWORD/g" | tee $file
-txt=$( cat $file )
-
-net_opt=
-if ! $DDD .is-wsl
-then
-    net_opt='--network host'
+    ls $path | grep -v main.sh
+    return 1
 fi
 
-docker build --tag ddd $net_opt __tmp__
+eval ". $file $args"
 
-rm -r __tmp__
+unset args
+unset arg
+unset path
+unset file

@@ -60,7 +60,7 @@ RUN python -m pip install --upgrade pyinstaller
 RUN python -m pip install --upgrade scikit-learn
 
 
-ENV __VER__=12.18.1
+ENV __VER__=12.18.2
 ENV __NAME__=node-v$__VER__-linux-x64.tar.xz
 RUN wget https://nodejs.org/dist/v$__VER__/$__NAME__
 RUN tar --extract --verbose --file $__NAME__
@@ -70,8 +70,9 @@ RUN mv ${__NAME__%.tar.xz} node
 ENV PATH=$__HOME__/node/bin:$PATH
 RUN npm install --global npm
 RUN npm install --global @ionic/cli
-RUN yes | ionic start app tabs --type=react
-
+RUN yes | ionic start APP tabs --type=react
+RUN cd APP && \
+    npm install node-sass
 
 RUN echo "\
 export LC_ALL=C.UTF-8\n\

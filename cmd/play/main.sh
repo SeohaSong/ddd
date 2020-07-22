@@ -1,6 +1,6 @@
 name=ddd
 path=.
-net_opt='--publish 2222:2222 --publish 8888:8888 --publish 8100:8100'
+net_opt='--publish 2222:2222 --publish 8888:8888 --publish 4200:4200'
 etc_opt="--tty --detach"
 # gpu_opt='--gpus all'
 

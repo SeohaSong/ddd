@@ -1,7 +1,6 @@
 name=ddd
 path=.
 net_opt='--publish 2222:2222 \
-         --publish 4200:4200 \
          --publish 8000:8000 \
          --publish 8100:8100 \
          --publish 8888:8888'

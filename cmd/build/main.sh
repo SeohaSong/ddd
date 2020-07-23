@@ -1,11 +1,20 @@
-[[ $PWD == $DDD_PATH ]]
+args=( $@ )
+arg=${args[0]}
+args=${args[@]:1}
+args=${args:-"''"}
 
-cp ddd/tools/cmake/CMakeLists.txt .
+path=$( dirname $BASH_SOURCE )
+file=$path/$arg/main.sh
 
-cmake .
-make
-$DDD clean cmake
+if [[ -z $arg || ! -f $file ]]
+then
+    ls $path | grep -v main.sh
+    return 1
+fi
 
-rm CMakeLists.txt
+eval ". $file $args"
 
-mv exe app
+unset args
+unset arg
+unset path
+unset file

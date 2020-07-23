@@ -1,7 +1,8 @@
 #!/bin/bash
 [[ "$PWD" =~ "$DDD_PATH" ]]
 
-if $DDD .is-ddd; then
+if $DDD .is-ddd
+then
     $@
 else
     opt='--tty --interactive'

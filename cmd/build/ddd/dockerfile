@@ -67,7 +67,9 @@ RUN npm install --global @ionic/cli
 RUN yes | ionic start APP tabs --type=react
 RUN cd APP && npm install node-sass
 
-RUN echo "\
+RUN echo '\
 export LC_ALL=C.UTF-8\n\
-export PYTHONPATH=$HOME/DDD/ddd/tools/python:\${PYTHONPATH:+\":PYTHONPATH\"}\n\
-. $HOME/DDD/ddd/cmd.sh profile" >> $__HOME__/.bashrc
+export PATH=$HOME/node/bin${PATH:+":$PATH"}\n\
+export PATH=$HOME/.local/bin${PATH:+":$PATH"}\n\
+export PYTHONPATH=$HOME/DDD/ddd/tools/python\${PYTHONPATH:+\":PYTHONPATH\"}\n\
+. $HOME/DDD/ddd/cmd.sh profile' >> $__HOME__/.bashrc

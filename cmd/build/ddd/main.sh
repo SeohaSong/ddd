@@ -1,5 +1,4 @@
-[ ! -z "$KEY" ]
-[ ! -z "$PASSWORD" ]
+[[ ! -z $KEY && ! -z $PASSWORD ]]
 
 cd $( dirname $BASH_SOURCE )
 
@@ -9,8 +8,8 @@ then
 fi
 mkdir __tmp__
 
-echo $KEY | tee __tmp__/KEY > /dev/null
-echo $PUB_KEY | tee __tmp__/PUB_KEY > /dev/null
+echo "$KEY" | tee __tmp__/KEY > /dev/null
+echo "$PUB_KEY" | tee __tmp__/PUB_KEY > /dev/null
 
 file=__tmp__/dockerfile
 cp dockerfile $file

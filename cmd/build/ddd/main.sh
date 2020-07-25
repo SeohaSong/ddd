@@ -10,17 +10,17 @@ fi
 mkdir __tmp__
 
 echo $KEY | tee __tmp__/KEY > /dev/null
-cat ~/.ssh/id_rsa | tee __tmp__/id_rsa > /dev/null
+echo $PUB_KEY | tee __tmp__/PUB_KEY > /dev/null
 
 file=__tmp__/dockerfile
 cp dockerfile $file
 txt=$( cat $file )
-echo "$txt" | sed -e "s/<PASSWORD\/>/$PASSWORD/g" | tee $file
+echo "$txt" | sed -e "s/<PASSWORD\/>/$PASSWORD/g" | tee $file > /dev/null
 
-net_opt=
-if ! $DDD .is-wsl
+net_opt='--network host'
+if $DDD .is-wsl
 then
-    net_opt='--network host'
+    net_opt=
 fi
 
 docker build --tag ddd $net_opt __tmp__

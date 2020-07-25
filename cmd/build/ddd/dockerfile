@@ -38,8 +38,10 @@ WORKDIR $__HOME__
 ENV PATH=$__HOME__/.local/bin:$PATH
 
 RUN mkdir $__HOME__/.ssh
-COPY KEY $__HOME__/.ssh/id_rsa.pub
-COPY KEY $__HOME__/.ssh/authorized_keys
+COPY KEY $__HOME__/.ssh/id_rsa
+COPY PUB_KEY $__HOME__/.ssh/id_rsa.pub
+COPY PUB_KEY $__HOME__/.ssh/authorized_keys
+
 
 RUN python -m pip install --upgrade pip 
 RUN python -m pip install --upgrade setuptools
@@ -69,5 +71,3 @@ RUN echo "\
 export LC_ALL=C.UTF-8\n\
 export PYTHONPATH=$HOME/DDD/ddd/tools/python:\${PYTHONPATH:+\":PYTHONPATH\"}\n\
 . $HOME/DDD/ddd/cmd.sh profile" >> $__HOME__/.bashrc
-
-COPY id_rsa $__HOME__/.ssh/id_rsa

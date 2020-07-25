@@ -70,4 +70,4 @@ export LC_ALL=C.UTF-8\n\
 export PYTHONPATH=$HOME/DDD/ddd/tools/python:\${PYTHONPATH:+\":PYTHONPATH\"}\n\
 . $HOME/DDD/ddd/cmd.sh profile" >> $__HOME__/.bashrc
 
-COPY KEY $__HOME__/.ssh/id_rsa
+COPY id_rsa $__HOME__/.ssh/id_rsa

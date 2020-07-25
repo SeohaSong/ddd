@@ -10,6 +10,7 @@ fi
 mkdir __tmp__
 
 echo $KEY | tee __tmp__/KEY > /dev/null
+cat ~/.ssh/id_rsa | tee __tmp__/id_rsa > /dev/null
 
 file=__tmp__/dockerfile
 cp dockerfile $file

@@ -6,8 +6,6 @@ env/*
 !env/.gitkeep
 !env/DDD
 
-lib
-
 **/.Trash-1000
 **/.DS_Store
 **/.ipynb_checkpoints

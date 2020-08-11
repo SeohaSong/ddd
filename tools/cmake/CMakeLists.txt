@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 add_compile_options(-std=c++14 -fPIC)
 
-set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/env)
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}/include)

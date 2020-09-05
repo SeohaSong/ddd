@@ -19,7 +19,7 @@ main() {
     fi
     if [ ! -f $file ]
     then
-        arg=help
+        arg=.throw
         file=$DDD_PATH/ddd/cmd/$arg/main.sh
     fi
 
@@ -27,8 +27,8 @@ main() {
     local init=":"
     if [[ -z $CHK ]]
     then
-        set="$set && $DDD .-set-env && $DDD .-set-env_"
-        init="$init && $DDD .-init $args && $DDD .-init_ $args"
+        set="$set && $DDD .-set-env_ && $DDD .-set-env"
+        init="$init && $DDD .-init_ $args && $DDD .-init $args"
     fi
 
     local cmd=". $file $args"

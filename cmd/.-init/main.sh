@@ -1,7 +1,5 @@
 main()
 {
-    $DDD .-trap
-    
     OPTS=
     KEY=$( cat $HOME/.ssh/id_rsa || : )
     PUB_KEY=$( cat $HOME/.ssh/id_rsa.pub || : )

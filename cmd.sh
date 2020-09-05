@@ -27,8 +27,8 @@ main() {
     local init=":"
     if [[ -z $CHK ]]
     then
-        set="$set && . $DDD_FILE .-set-env_ && . $DDD_FILE .-set-env"
-        init="$init && $DDD .-trap && $DDD .-init_ $args && $DDD .-init $args"
+        set=". $DDD_FILE .-set-env_ && . $DDD_FILE .-set-env"
+        init="$DDD .-trap && $DDD .-init_ $args && $DDD .-init $args"
     fi
 
     local cmd=". $file $args"

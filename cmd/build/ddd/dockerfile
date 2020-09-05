@@ -32,15 +32,14 @@ RUN echo '<PASSWORD/>\n<PASSWORD/>' | adduser ddd
 RUN echo "ddd ALL=(ALL:ALL) ALL" >> /etc/sudoers
 
 USER ddd
-ENV __HOME__=/home/ddd
-WORKDIR $__HOME__
+WORKDIR /home/ddd
 
-ENV PATH=$__HOME__/.local/bin:$PATH
+ENV PATH=/home/ddd/.local/bin:$PATH
 
-RUN mkdir $__HOME__/.ssh
-COPY KEY $__HOME__/.ssh/id_rsa
-COPY PUB_KEY $__HOME__/.ssh/id_rsa.pub
-COPY PUB_KEY $__HOME__/.ssh/authorized_keys
+RUN mkdir /home/ddd/.ssh
+COPY KEY /home/ddd/.ssh/id_rsa
+COPY PUB_KEY /home/ddd/.ssh/id_rsa.pub
+COPY PUB_KEY /home/ddd/.ssh/authorized_keys
 
 
 RUN python -m pip install --upgrade pip 
@@ -60,7 +59,7 @@ RUN tar --extract --verbose --file $__NAME__
 RUN rm $__NAME__
 RUN mv ${__NAME__%.tar.xz} node
 
-ENV PATH=$__HOME__/node/bin:$PATH
+ENV PATH=/home/ddd/node/bin:$PATH
 RUN npm install --global npm
 
 RUN npm install --global @ionic/cli
@@ -72,4 +71,4 @@ export LC_ALL=C.UTF-8\n\
 export PATH=$HOME/node/bin${PATH:+":$PATH"}\n\
 export PATH=$HOME/.local/bin${PATH:+":$PATH"}\n\
 export PYTHONPATH=$HOME/DDD/ddd/tools/python${PYTHONPATH:+":PYTHONPATH"}\n\
-. $HOME/DDD/ddd/cmd.sh profile' >> $__HOME__/.bashrc
+. /home/ddd/DDD/ddd/cmd.sh profile' >> /home/ddd/.bashrc

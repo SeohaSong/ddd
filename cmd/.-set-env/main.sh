@@ -45,7 +45,7 @@ main()
     fi
 
     alias gogo="cd $DDD_PATH"
-    eval "$DDD() { . $DDD_PATH/ddd/cmd.sh \$@; } && export -f $DDD"
+    eval "$DDD() { . $DDD_FILE \$@; } && export -f $DDD"
 }
 
 main

@@ -8,6 +8,7 @@ main() {
 
     local CHK=$DDD
     local DDD_PATH=$( dirname $( cd $( dirname $BASH_SOURCE ) && pwd ) )
+    local DDD_FILE="$DDD_PATH/ddd/cmd.sh"
     local DDD=$( cat $DDD_PATH/env/DDD 2> /dev/null )
     DDD=${DDD:-"ddd"}
 
@@ -26,7 +27,7 @@ main() {
     local init=":"
     if [[ -z $CHK ]]
     then
-        set="$set && $DDD .-set-env_ && $DDD .-set-env"
+        set="$set && . $DDD_FILE .-set-env_ && . $DDD_FILE .-set-env"
         init="$init && $DDD .-trap && $DDD .-init_ $args && $DDD .-init $args"
     fi
 

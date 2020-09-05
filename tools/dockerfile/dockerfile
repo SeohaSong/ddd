@@ -52,7 +52,7 @@ RUN python -m pip install --upgrade pycodestyle
 RUN python -m pip install --upgrade pyinstaller
 RUN python -m pip install --upgrade scikit-learn
 
-ENV __VER__=12.18.2
+ENV __VER__=12.18.3
 ENV __NAME__=node-v$__VER__-linux-x64.tar.xz
 RUN wget https://nodejs.org/dist/v$__VER__/$__NAME__
 RUN tar --extract --verbose --file $__NAME__

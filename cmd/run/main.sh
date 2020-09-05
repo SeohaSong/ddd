@@ -1,10 +1,20 @@
-#!/bin/bash
-[[ "$PWD" =~ "$DDD_PATH" ]]
+args=( $@ )
+arg=${args[0]}
+args=${args[@]:1}
+args=${args:-"''"}
 
-if $DDD .is-ddd
+path=$( dirname $BASH_SOURCE )
+file=$path/$arg/main.sh
+
+if [[ -z $arg || ! -f $file ]]
 then
-    $@
-else
-    opt='--tty --interactive'
-    docker exec $opt --workdir /home/ddd/DDD/${PWD#$DDD_PATH} ddd $@
+    ls $path | grep -v main.sh
+    return 1
 fi
+
+eval ". $file $args"
+
+unset args
+unset arg
+unset path
+unset file

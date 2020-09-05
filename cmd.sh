@@ -24,11 +24,11 @@ main() {
     fi
 
     local set=":"
-    local init=":"
+    local init="$DDD .-trap"
     if [[ -z $CHK ]]
     then
         set=". $DDD_FILE .-set-env_ && . $DDD_FILE .-set-env"
-        init="$DDD .-trap && $DDD .-init_ $args && $DDD .-init $args"
+        init="$init && $DDD .-init_ $args && $DDD .-init $args"
     fi
 
     local cmd=". $file $args"

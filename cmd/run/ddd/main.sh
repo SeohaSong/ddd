@@ -1,3 +1,5 @@
+ddd build ddd > /dev/null
+
 path=.
 if [[ ! $PWD == $DDD_PATH && $PWD =~ $DDD_PATH ]]
 then

@@ -1,27 +1,35 @@
-[[ ! -z $KEY && ! -z $PASSWORD ]]
-
-cd $( dirname $BASH_SOURCE )
-
-if [ -d __tmp__ ]
-then
-    rm -rf __tmp__
-fi
-mkdir __tmp__
-
-echo "$KEY" | tee __tmp__/KEY > /dev/null
-echo "$PUB_KEY" | tee __tmp__/PUB_KEY > /dev/null
-
-file=__tmp__/dockerfile
-cp dockerfile $file
-txt=$( cat $file )
-echo "$txt" | sed -e "s/<PASSWORD\/>/$PASSWORD/g" | tee $file > /dev/null
-
-net_opt='--network host'
-if $DDD .is-wsl
-then
-    net_opt=
+if [[ ! -z $( docker ps -a | grep ddd || : ) ]]; then
+    ddd echo "already running"
+    return
 fi
 
-docker build --tag ddd $net_opt __tmp__
+name=ddd
+path=.
+net_opt='--publish 2222:2222
+         --publish 8000:8000
+         --publish 8100:8100
+         --publish 8888:8888'
+etc_opt="--tty --detach"
+# gpu_opt='--gpus all'
 
-rm -r __tmp__
+if [[ $PWD != $DDD_PATH && $PWD =~ $DDD_PATH ]]
+then
+    path=${PWD#$DDD_PATH/}
+fi
+
+if ! $DDD .is-wsl
+then
+    net_opt='--network host'
+fi
+
+docker run \
+    $gpu_opt $net_opt $etc_opt \
+    --interactive --rm \
+    --name $name \
+    --workdir /home/ddd/DDD/$path \
+    --volume $DDD_PATH:/home/ddd/DDD \
+    $name
+
+echo Port 2222 | \
+    docker exec --interactive --user root ddd tee /etc/ssh/sshd_config
+docker exec --user root ddd service ssh start

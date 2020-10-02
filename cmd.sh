@@ -13,7 +13,7 @@ main() {
     DDD=${DDD:-"ddd"}
 
     local set=":"
-    local init="$DDD .-trap"
+    local init="$DDD -trap"
     if [[ -z $ARG ]]
     then
         ARG=$arg

@@ -28,7 +28,8 @@ main() {
     fi
     if [ ! -f $file ]
     then
-        local arg_=${args[0]}
+        args=( $args )
+        local arg_=${args[0]:-"__"}
         args=${args[@]:1}
         args=${args:-"''"}
         file=$DDD_PATH/cmd/$arg/$arg_/main.sh

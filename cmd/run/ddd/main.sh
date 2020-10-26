@@ -1,8 +1,4 @@
-ddd build ddd > /dev/null
+$DDD .is-ddd
 
-path=.
-if [[ ! $PWD == $DDD_PATH && $PWD =~ $DDD_PATH ]]
-then
-    path=${PWD#$DDD_PATH/}
-fi
-ssh ddd@127.0.0.1 -t -p 2222 "cd DDD/$path && bash"
+jupyter-notebook password
+jupyter-notebook --ip 0.0.0.0 . &

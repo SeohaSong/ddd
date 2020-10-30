@@ -1,35 +1,27 @@
-if [[ ! -z $( docker ps -a | grep ddd || : ) ]]; then
-    ddd echo "already running"
-    return
-fi
+[[ ! -z $KEY && ! -z $PASSWORD ]]
 
-name=ddd
-path=.
-net_opt='--publish 2222:2222
-         --publish 8000:8000
-         --publish 8100:8100
-         --publish 8888:8888'
-etc_opt="--tty --detach"
-# gpu_opt='--gpus all'
+cd $( dirname $BASH_SOURCE )
 
-if [[ $PWD != $DDD_PATH && $PWD =~ $DDD_PATH ]]
+if [ -d __tmp__ ]
 then
-    path=${PWD#$DDD_PATH/}
+    rm -rf __tmp__
 fi
+mkdir __tmp__
 
-if ! $DDD .is-wsl
+echo "$KEY" | tee __tmp__/KEY > /dev/null
+echo "$PUB_KEY" | tee __tmp__/PUB_KEY > /dev/null
+file=__tmp__/dockerfile
+cp $DDD_PATH/ddd/tools/dockerfile/dockerfile __tmp__
+
+txt=$( cat $file )
+echo "$txt" | sed -e "s/<PASSWORD\/>/$PASSWORD/g" | tee $file > /dev/null
+
+net_opt='--network host'
+if $DDD .is-wsl
 then
-    net_opt='--network host'
+    net_opt=
 fi
 
-docker run \
-    $gpu_opt $net_opt $etc_opt \
-    --interactive --rm \
-    --name $name \
-    --workdir /home/ddd/DDD/$path \
-    --volume $DDD_PATH:/home/ddd/DDD \
-    $name
+docker build --tag ddd $net_opt __tmp__
 
-echo Port 2222 | \
-    docker exec --interactive --user root ddd tee /etc/ssh/sshd_config
-docker exec --user root ddd service ssh start
+rm -r __tmp__

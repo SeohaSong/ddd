@@ -1,8 +1,35 @@
-ddd build ddd > /dev/null
+if [[ ! -z $( docker ps -a | grep ddd || : ) ]]; then
+    ddd echo "already running"
+    return
+fi
 
+name=ddd
 path=.
-if [[ ! $PWD == $DDD_PATH && $PWD =~ $DDD_PATH ]]
+net_opt='--publish 2222:2222
+         --publish 8000:8000
+         --publish 8100:8100
+         --publish 8888:8888'
+etc_opt="--tty --detach"
+# gpu_opt='--gpus all'
+
+if [[ $PWD != $DDD_PATH && $PWD =~ $DDD_PATH ]]
 then
     path=${PWD#$DDD_PATH/}
 fi
-ssh ddd@127.0.0.1 -t -p 2222 "cd DDD/$path && bash"
+
+if ! $DDD .is-wsl
+then
+    net_opt='--network host'
+fi
+
+docker run \
+    $gpu_opt $net_opt $etc_opt \
+    --interactive --rm \
+    --name $name \
+    --workdir /home/ddd/DDD/$path \
+    --volume $DDD_PATH:/home/ddd/DDD \
+    $name
+
+echo Port 2222 | \
+    docker exec --interactive --user root ddd tee /etc/ssh/sshd_config
+docker exec --user root ddd service ssh start

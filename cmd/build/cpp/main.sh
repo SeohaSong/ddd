@@ -1,9 +1,12 @@
+build_option=$@
+[[ -f dependency.txt ]] || return 0
+build_cmd="ddd build .cpp $build_option"
 for lib in $( cat dependency.txt )
 do
-    echo $lib
     (
         cd ../$lib
-        ddd build .cpp
+        ddd build cpp $build_option
     )
 done
-ddd build .cpp
+ddd clean cmake
+ddd build .cpp $build_option

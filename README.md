@@ -1,23 +1,37 @@
 # DDD (DDELA DDOLA DDE)
 > ### *"The core-package for every-project."*
 
-## Naming for ml data
+## project types
 ```
-dataset
-    meta
-    recs
-        featsets
-            featset
-                feat
-        labels
-            label
-        rec
-            featset
-            label
+ddd
+    ddd
+        cmd: command set. muscle
+        tools: static warehouse
+    data: warehouse
+    env: env dependent build output
+    app: execution sources
+    src: essential components
+cxx
+    lib
+    src
+    include
+    tools
+    Cmakelist.txt
+python
+    main.py
+    tools
+java
 ```
 
 ## rule
 ```
+.cmd: 프라이빗
+-cmd: 세션유지
+abc => ((a)b)c
+
+_val: hidden, private
+val_: sub, template
+
 STATIC_VAL
 __glob_val__
 ClassName
@@ -34,26 +48,37 @@ val_i (valI), idx
 val_n (valN), num
 val_s (valS), size
 
-someName some_name some-name name--some
-name.main name/main name__main
+someName some_name some-name
+name.main name/main name__main name--some
 
 asdf \
-    asdfasdf;
-
+asdfasdf;
 asdf
 {
     asdfasdf;
 }
-
-a = {
+asdf = {
     ...+
     ....
 };
-
-a = {...+
-     ....};
-
-    txt = "\
-...\
+asdf = {...+
+        ....};
+    asdf = "\
+...
 ....";
+```
+
+## Naming for ml data
+```
+dataset
+    meta
+    recs
+        featsets
+            featset
+                feat
+        labels
+            label
+        rec
+            featset
+            label
 ```

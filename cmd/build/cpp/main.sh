@@ -9,4 +9,9 @@ do
     )
 done
 ddd clean cmake
+if [[ -d lib ]]
+then
+    rm -r lib
+fi
+mkdir lib
 ddd build .cpp $build_option

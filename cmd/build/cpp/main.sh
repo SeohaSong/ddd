@@ -1,17 +1,15 @@
 build_option=$@
-[[ -f dependency.txt ]] || return 0
-build_cmd="ddd build .cpp $build_option"
-for lib in $( cat dependency.txt )
-do
-    (
-        cd ../$lib
-        ddd build cpp $build_option
-    )
-done
-ddd clean cmake
-if [[ -d lib ]]
+if [[ ! -f dependency.txt ]]
 then
-    rm -r lib
+    return
 fi
-mkdir lib
+$DDD build .cpp-dependency > /dev/null
+$DDD echo "dependency-lock.txt"
+cat dependency-lock.txt
+$DDD echo "/dependency-lock.txt"
+for lib in $( cat dependency-lock.txt )
+do (
+    cd ../$lib
+    ddd build .cpp $build_option
+) done
 ddd build .cpp $build_option

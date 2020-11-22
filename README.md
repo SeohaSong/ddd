@@ -51,21 +51,26 @@ val_s (valS), size
 someName some_name some-name
 name.main name/main name__main name--some
 
+--------------------
 asdf \
-asdfasdf;
-asdf
-{
-    asdfasdf;
-}
+    asdfasdf \
+    asdfsafd:
+(
+    asdfa safd;
+)
+--------------------
 asdf = {
     ...+
     ....
 };
+--------------------
 asdf = {...+
         ....};
+--------------------
     asdf = "\
 ...
 ....";
+--------------------
 ```
 
 ## Naming for ml data

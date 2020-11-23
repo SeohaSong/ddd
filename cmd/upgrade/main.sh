@@ -1,3 +1,3 @@
-sudo apt update --yes
-sudo apt upgrade --yes
-sudo apt autoremove --yes
+sudo apt update --yes || :
+sudo apt upgrade --yes || :
+sudo apt autoremove --yes || :

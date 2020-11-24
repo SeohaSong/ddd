@@ -1,5 +1,5 @@
-ddd run ddd > /dev/null
-
+docker stop ddd 2> /dev/null || :
+ddd run ddd
 path=.
 if [[ ! $PWD == $DDD_PATH && $PWD =~ $DDD_PATH ]]
 then

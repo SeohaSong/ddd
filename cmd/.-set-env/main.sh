@@ -43,4 +43,3 @@ then
 fi
 
 alias gogo="cd $DDD_PATH"
-eval "$DDD() { . $DDD_FILE \$@; } && export -f $DDD"

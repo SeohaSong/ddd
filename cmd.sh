@@ -1,5 +1,4 @@
 #!/bin/bash
-
 main() {
     local args=( $@ )
     local arg=${args[0]:-"__"}
@@ -50,7 +49,7 @@ main() {
     then
         cmd="( $init && $cmd 2>&1 ) 2> /dev/null"
     fi
-    eval "$set && $cmd"
+    cmd="$set && $cmd"
+    eval "$DDD() { . $DDD_FILE \$@; } && export -f $DDD && $cmd"
 }
-
 main $@

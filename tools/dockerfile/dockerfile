@@ -62,7 +62,7 @@ RUN cd APP && npm install node-sass
 RUN echo '\
 export PYTHONPATH=$HOME/DDD/ddd/src/python${PYTHONPATH:+":PYTHONPATH"}\
 ' >> /home/ddd/.bashrc
-# RUN python -m pip install --upgrade pip 
+RUN python -m pip install --upgrade pip
 # RUN python -m pip install --upgrade setuptools
 # RUN python -m pip install --upgrade pyinstaller
 # RUN python -m pip install --upgrade pycodestyle

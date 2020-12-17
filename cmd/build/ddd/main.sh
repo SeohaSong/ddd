@@ -8,8 +8,8 @@ then
 fi
 mkdir __tmp__
 
-echo "$KEY" | tee __tmp__/KEY > /dev/null
-echo "$PUB_KEY" | tee __tmp__/PUB_KEY > /dev/null
+echo "$KEY" | tee __tmp__/id_rsa > /dev/null
+echo "$PUB_KEY" | tee __tmp__/id_rsa.pub > /dev/null
 file=__tmp__/dockerfile
 cp $DDD_PATH/ddd/tools/dockerfile/dockerfile __tmp__
 

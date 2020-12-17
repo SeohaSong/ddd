@@ -1,74 +1,74 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
+ENV IMG_VER=20201217
 
 RUN apt update --yes
+RUN apt upgrade --yes
 
 RUN apt install --yes --no-install-recommends vim
 RUN apt install --yes --no-install-recommends git
-RUN apt install --yes --no-install-recommends ssh
-RUN apt install --yes --no-install-recommends g++
-RUN apt install --yes --no-install-recommends make
-RUN apt install --yes --no-install-recommends sudo
 RUN apt install --yes --no-install-recommends wget
-RUN apt install --yes --no-install-recommends cmake
-RUN apt install --yes --no-install-recommends xz-utils
-RUN apt install --yes --no-install-recommends default-jdk
-RUN apt install --yes --no-install-recommends python3-dev
-RUN apt install --yes --no-install-recommends python3-pip
+RUN apt install --yes --no-install-recommends curl
 
-RUN ln --symbolic $( which python3 ) /usr/bin/python
-RUN ln --symbolic $( which pip3 ) /usr/bin/pip
+RUN apt install --yes --no-install-recommends sudo
+RUN echo '<PASSWORD/>\n<PASSWORD/>' | passwd
+RUN echo '<PASSWORD/>\n<PASSWORD/>' | adduser ddd
+RUN echo "ddd ALL=(ALL:ALL) ALL" >> /etc/sudoers
 
+RUN apt install --yes --no-install-recommends ssh
 ENV __TMP__=/etc/ssh/ssh_config
 RUN cat $__TMP__ | grep -v ServerAliveInterval | tee ${__TMP__}_ > /dev/null
 RUN mv ${__TMP__}_ $__TMP__
 RUN echo ServerAliveInterval 60 | tee -a $__TMP__ > /dev/null
 
+RUN apt install --yes --no-install-recommends g++
+RUN apt install --yes --no-install-recommends make
+RUN DEBIAN_FRONTEND=noninteractive \
+    apt-get install -y --no-install-recommends cmake
+
+RUN apt install --yes --no-install-recommends python3-dev
+RUN apt install --yes --no-install-recommends python3-pip
+RUN ln --symbolic $( which python3 ) /usr/bin/python
+RUN ln --symbolic $( which pip3 ) /usr/bin/pip
+
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash
+RUN apt install --yes --no-install-recommends nodejs
+
+RUN apt install --yes --no-install-recommends default-jdk
+
 RUN apt autoremove --yes
 
-
-RUN echo '<PASSWORD/>\n<PASSWORD/>' | passwd
-RUN echo '<PASSWORD/>\n<PASSWORD/>' | adduser ddd
-RUN echo "ddd ALL=(ALL:ALL) ALL" >> /etc/sudoers
+RUN mkdir /home/ddd/.ssh
+COPY id_rsa /home/ddd/.ssh/id_rsa
+RUN chmod 600 /home/ddd/.ssh/id_rsa
+COPY id_rsa.pub /home/ddd/.ssh/id_rsa.pub
+RUN chmod 644 /home/ddd/.ssh/id_rsa.pub
+COPY id_rsa.pub /home/ddd/.ssh/authorized_keys
+RUN chmod 644 /home/ddd/.ssh/authorized_keys
 
 USER ddd
 WORKDIR /home/ddd
+RUN echo 'export LC_ALL=C.UTF-8' >> /home/ddd/.bashrc
 
 ENV PATH=/home/ddd/.local/bin:$PATH
+RUN echo 'export PATH=$HOME/.local/bin${PATH:+":$PATH"}' >> /home/ddd/.bashrc
 
-RUN mkdir /home/ddd/.ssh
-COPY KEY /home/ddd/.ssh/id_rsa
-COPY PUB_KEY /home/ddd/.ssh/id_rsa.pub
-COPY PUB_KEY /home/ddd/.ssh/authorized_keys
-
-
-RUN python -m pip install --upgrade pip 
-RUN python -m pip install --upgrade setuptools
-RUN python -m pip install --upgrade pandas
-RUN python -m pip install --upgrade pylint
-RUN python -m pip install --upgrade jupyter
-RUN python -m pip install --upgrade matplotlib
-RUN python -m pip install --upgrade pycodestyle
-RUN python -m pip install --upgrade pyinstaller
-RUN python -m pip install --upgrade scikit-learn
-
-ENV __VER__=12.18.3
-ENV __NAME__=node-v$__VER__-linux-x64.tar.xz
-RUN wget https://nodejs.org/dist/v$__VER__/$__NAME__
-RUN tar --extract --verbose --file $__NAME__
-RUN rm $__NAME__
-RUN mv ${__NAME__%.tar.xz} node
-
-ENV PATH=/home/ddd/node/bin:$PATH
+RUN npm config set prefix /home/ddd/.local
 RUN npm install --global npm
-
 RUN npm install --global @ionic/cli
 RUN yes | ionic start APP tabs --type=react
 RUN cd APP && npm install node-sass
 
-RUN echo '\
-export LC_ALL=C.UTF-8\n\
-export PATH=$HOME/node/bin${PATH:+":$PATH"}\n\
-export PATH=$HOME/.local/bin${PATH:+":$PATH"}\n\
-export PYTHONPATH=$HOME/DDD/ddd/tools/python${PYTHONPATH:+":PYTHONPATH"}\n\
-. /home/ddd/DDD/ddd/cmd.sh profile' >> /home/ddd/.bashrc
+# RUN echo '\
+# export PYTHONPATH=$HOME/DDD/ddd/tools/python${PYTHONPATH:+":PYTHONPATH"}\n\
+# . /home/ddd/DDD/ddd/cmd.sh profile' >> /home/ddd/.bashrc
+# RUN python -m pip install --upgrade pip 
+# RUN python -m pip install --upgrade setuptools
+# RUN python -m pip install --upgrade pyinstaller
+# RUN python -m pip install --upgrade pycodestyle
+# RUN python -m pip install --upgrade pylint
+# RUN python -m pip install --upgrade flask
+# RUN python -m pip install --upgrade pandas
+# RUN python -m pip install --upgrade jupyter
+# RUN python -m pip install --upgrade matplotlib
+# RUN python -m pip install --upgrade scikit-learn

@@ -59,9 +59,9 @@ RUN npm install --global @ionic/cli
 RUN yes | ionic start APP tabs --type=react
 RUN cd APP && npm install node-sass
 
-# RUN echo '\
-# export PYTHONPATH=$HOME/DDD/ddd/tools/python${PYTHONPATH:+":PYTHONPATH"}\n\
-# . /home/ddd/DDD/ddd/cmd.sh profile' >> /home/ddd/.bashrc
+RUN echo '\
+export PYTHONPATH=$HOME/DDD/ddd/src/python${PYTHONPATH:+":PYTHONPATH"}\
+' >> /home/ddd/.bashrc
 # RUN python -m pip install --upgrade pip 
 # RUN python -m pip install --upgrade setuptools
 # RUN python -m pip install --upgrade pyinstaller
@@ -72,3 +72,5 @@ RUN cd APP && npm install node-sass
 # RUN python -m pip install --upgrade jupyter
 # RUN python -m pip install --upgrade matplotlib
 # RUN python -m pip install --upgrade scikit-learn
+
+RUN echo '. /home/ddd/DDD/ddd/cmd.sh profile' >> /home/ddd/.bashrc

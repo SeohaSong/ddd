@@ -31,7 +31,7 @@ RUN apt install --yes --no-install-recommends python3-pip
 RUN ln --symbolic $( which python3 ) /usr/bin/python
 RUN ln --symbolic $( which pip3 ) /usr/bin/pip
 
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash
 RUN apt install --yes --no-install-recommends nodejs
 
 RUN apt install --yes --no-install-recommends default-jdk

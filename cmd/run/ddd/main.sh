@@ -1,6 +1,13 @@
-if [[ ! -z $( docker ps -a | grep ddd || : ) ]]; then
-    ddd echo "already running"
-    return
+vals=( $( docker ps -a | grep ddd || : ) )
+if [[ ! -z $vals ]]
+then
+    latest_idx=$(( ${#vals[@]} - 1 ))
+    container_name=${vals[$latest_idx]}
+    if [[ "$container_name" == ddd ]]
+    then
+        ddd echo "There is already running ddd-container"
+        return 1
+    fi
 fi
 
 name=ddd

@@ -63,14 +63,12 @@ RUN echo '\
 export PYTHONPATH=$HOME/DDD/ddd/src/python${PYTHONPATH:+":PYTHONPATH"}\
 ' >> /home/ddd/.bashrc
 RUN python -m pip install --upgrade pip
-# RUN python -m pip install --upgrade setuptools
-# RUN python -m pip install --upgrade pyinstaller
-# RUN python -m pip install --upgrade pycodestyle
-# RUN python -m pip install --upgrade pylint
-# RUN python -m pip install --upgrade flask
-# RUN python -m pip install --upgrade pandas
-# RUN python -m pip install --upgrade jupyter
-# RUN python -m pip install --upgrade matplotlib
-# RUN python -m pip install --upgrade scikit-learn
+RUN python -m pip install --upgrade pyinstaller
+RUN python -m pip install --upgrade pycodestyle
+RUN python -m pip install --upgrade pylint
+RUN python -m pip install --upgrade pandas
+RUN python -m pip install --upgrade jupyter
+RUN python -m pip install --upgrade matplotlib
+RUN python -m pip install --upgrade flask
 
 RUN echo '. /home/ddd/DDD/ddd/cmd.sh profile' >> /home/ddd/.bashrc

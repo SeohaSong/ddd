@@ -55,22 +55,22 @@ RUN echo 'export LC_ALL=C.UTF-8' >> /home/ddd/.bashrc
 ENV PATH=/home/ddd/.local/bin:$PATH
 RUN echo 'export PATH=$HOME/.local/bin${PATH:+":$PATH"}' >> /home/ddd/.bashrc
 
-# RUN npm config set prefix /home/ddd/.local
-# RUN npm install --global npm
-# RUN npm install --global @ionic/cli
-# RUN yes | ionic start APP tabs --type=react
-# RUN cd APP && npm install node-sass
+RUN npm config set prefix /home/ddd/.local
+RUN npm install --global npm
+RUN npm install --global @ionic/cli
+RUN yes | ionic start APP tabs --type=react
+RUN cd APP && npm install node-sass
 
-# RUN echo '\
-# export PYTHONPATH=$HOME/DDD/ddd/src/python${PYTHONPATH:+":PYTHONPATH"}\
-# ' >> /home/ddd/.bashrc
-# RUN python -m pip install --upgrade pip
-# RUN python -m pip install --upgrade pyinstaller
-# RUN python -m pip install --upgrade pycodestyle
-# RUN python -m pip install --upgrade pylint
-# RUN python -m pip install --upgrade pandas
-# RUN python -m pip install --upgrade jupyter
-# RUN python -m pip install --upgrade matplotlib
-# RUN python -m pip install --upgrade flask
+RUN echo '\
+export PYTHONPATH=$HOME/DDD/ddd/src/python${PYTHONPATH:+":PYTHONPATH"}\
+' >> /home/ddd/.bashrc
+RUN python -m pip install --upgrade pip
+RUN python -m pip install --upgrade pyinstaller
+RUN python -m pip install --upgrade pycodestyle
+RUN python -m pip install --upgrade pylint
+RUN python -m pip install --upgrade pandas
+RUN python -m pip install --upgrade jupyter
+RUN python -m pip install --upgrade matplotlib
+RUN python -m pip install --upgrade flask
 
 RUN echo '. /home/ddd/DDD/ddd/cmd.sh profile' >> /home/ddd/.bashrc

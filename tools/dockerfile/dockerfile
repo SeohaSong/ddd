@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-ENV IMG_VER=20201217
+ENV IMG_VER=20201221
 
 RUN apt update --yes
 RUN apt upgrade --yes
@@ -40,35 +40,37 @@ RUN apt autoremove --yes
 
 RUN mkdir /home/ddd/.ssh
 COPY id_rsa /home/ddd/.ssh/id_rsa
+RUN chown ddd:ddd /home/ddd/.ssh/id_rsa
 RUN chmod 600 /home/ddd/.ssh/id_rsa
 COPY id_rsa.pub /home/ddd/.ssh/id_rsa.pub
+RUN chown ddd:ddd /home/ddd/.ssh/id_rsa.pub
 RUN chmod 644 /home/ddd/.ssh/id_rsa.pub
 COPY id_rsa.pub /home/ddd/.ssh/authorized_keys
+RUN chown ddd:ddd /home/ddd/.ssh/authorized_keys
 RUN chmod 644 /home/ddd/.ssh/authorized_keys
 
 USER ddd
 WORKDIR /home/ddd
 RUN echo 'export LC_ALL=C.UTF-8' >> /home/ddd/.bashrc
-
 ENV PATH=/home/ddd/.local/bin:$PATH
 RUN echo 'export PATH=$HOME/.local/bin${PATH:+":$PATH"}' >> /home/ddd/.bashrc
 
-RUN npm config set prefix /home/ddd/.local
-RUN npm install --global npm
-RUN npm install --global @ionic/cli
-RUN yes | ionic start APP tabs --type=react
-RUN cd APP && npm install node-sass
+# RUN npm config set prefix /home/ddd/.local
+# RUN npm install --global npm
+# RUN npm install --global @ionic/cli
+# RUN yes | ionic start APP tabs --type=react
+# RUN cd APP && npm install node-sass
 
-RUN echo '\
-export PYTHONPATH=$HOME/DDD/ddd/src/python${PYTHONPATH:+":PYTHONPATH"}\
-' >> /home/ddd/.bashrc
-RUN python -m pip install --upgrade pip
-RUN python -m pip install --upgrade pyinstaller
-RUN python -m pip install --upgrade pycodestyle
-RUN python -m pip install --upgrade pylint
-RUN python -m pip install --upgrade pandas
-RUN python -m pip install --upgrade jupyter
-RUN python -m pip install --upgrade matplotlib
-RUN python -m pip install --upgrade flask
+# RUN echo '\
+# export PYTHONPATH=$HOME/DDD/ddd/src/python${PYTHONPATH:+":PYTHONPATH"}\
+# ' >> /home/ddd/.bashrc
+# RUN python -m pip install --upgrade pip
+# RUN python -m pip install --upgrade pyinstaller
+# RUN python -m pip install --upgrade pycodestyle
+# RUN python -m pip install --upgrade pylint
+# RUN python -m pip install --upgrade pandas
+# RUN python -m pip install --upgrade jupyter
+# RUN python -m pip install --upgrade matplotlib
+# RUN python -m pip install --upgrade flask
 
 RUN echo '. /home/ddd/DDD/ddd/cmd.sh profile' >> /home/ddd/.bashrc

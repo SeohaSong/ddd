@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-ENV IMG_VER=20201221
+ENV dockerfile_ver=20201224
 
 RUN apt update --yes
 RUN apt upgrade --yes
@@ -9,6 +9,7 @@ RUN apt install --yes --no-install-recommends vim
 RUN apt install --yes --no-install-recommends git
 RUN apt install --yes --no-install-recommends wget
 RUN apt install --yes --no-install-recommends curl
+RUN apt install --yes --no-install-recommends unzip
 
 RUN apt install --yes --no-install-recommends sudo
 RUN echo '<PASSWORD/>\n<PASSWORD/>' | passwd
@@ -16,15 +17,17 @@ RUN echo '<PASSWORD/>\n<PASSWORD/>' | adduser ddd
 RUN echo "ddd ALL=(ALL:ALL) ALL" >> /etc/sudoers
 
 RUN apt install --yes --no-install-recommends ssh
-ENV __TMP__=/etc/ssh/ssh_config
-RUN cat $__TMP__ | grep -v ServerAliveInterval | tee ${__TMP__}_ > /dev/null
-RUN mv ${__TMP__}_ $__TMP__
-RUN echo ServerAliveInterval 60 | tee -a $__TMP__ > /dev/null
+ENV ssh_config_file=/etc/ssh/ssh_config
+RUN cat $ssh_config_file | \
+    grep -v ServerAliveInterval | \
+    tee ${ssh_config_file}_ > /dev/null
+RUN mv ${ssh_config_file}_ $ssh_config_file
+RUN echo ServerAliveInterval 60 | tee -a $ssh_config_file > /dev/null
 
 RUN apt install --yes --no-install-recommends g++
 RUN apt install --yes --no-install-recommends make
 RUN DEBIAN_FRONTEND=noninteractive \
-    apt-get install -y --no-install-recommends cmake
+    apt install --yes --no-install-recommends cmake
 
 RUN apt install --yes --no-install-recommends python3-dev
 RUN apt install --yes --no-install-recommends python3-pip
@@ -72,5 +75,13 @@ RUN python -m pip install --upgrade pandas
 RUN python -m pip install --upgrade jupyter
 RUN python -m pip install --upgrade matplotlib
 RUN python -m pip install --upgrade flask
+
+ENV gradle_ver=6.6.1
+RUN wget https://services.gradle.org/distributions/gradle-$gradle_ver-bin.zip
+RUN unzip gradle-$gradle_ver-bin.zip && rm gradle-$gradle_ver-bin.zip
+RUN mv gradle-$gradle_ver /home/ddd/.local/lib
+RUN ln -s /home/ddd/.local/lib/gradle-$gradle_ver/bin/gradle \
+          /home/ddd/.local/bin/gradle
+RUN gradle --version
 
 RUN echo '. /home/ddd/DDD/ddd/cmd.sh profile' >> /home/ddd/.bashrc

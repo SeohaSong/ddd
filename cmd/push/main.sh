@@ -1,6 +1,6 @@
 [[ -e .git ]]
 
-$DDD echo Update \'$PWD\' repo
+$DDD echo "Update \'$PWD\' repo"
 
 git checkout master
 git config user.email "tisutoo@gmail.com"

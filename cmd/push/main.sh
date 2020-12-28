@@ -1,4 +1,4 @@
-[[ -d .git || -f .git ]]
+[[ -e .git ]]
 
 $DDD echo Update \'$PWD\' repo
 

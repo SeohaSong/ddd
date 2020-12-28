@@ -1,1 +1,1 @@
-echo "[$DDD] <$@ $line />"
+echo "[$DDD] <$@ $line/>"

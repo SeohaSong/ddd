@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-ENV dockerfile_ver=20201224
+ENV dockerfile_ver=20210104
 
 RUN apt update --yes
 RUN apt upgrade --yes
@@ -42,6 +42,7 @@ RUN apt install --yes --no-install-recommends default-jdk
 RUN apt autoremove --yes
 
 RUN mkdir /home/ddd/.ssh
+RUN chown ddd:ddd /home/ddd/.ssh
 COPY id_rsa /home/ddd/.ssh/id_rsa
 RUN chown ddd:ddd /home/ddd/.ssh/id_rsa
 RUN chmod 600 /home/ddd/.ssh/id_rsa
@@ -61,8 +62,8 @@ RUN echo 'export PATH=$HOME/.local/bin${PATH:+":$PATH"}' >> /home/ddd/.bashrc
 RUN npm config set prefix /home/ddd/.local
 RUN npm install --global npm
 RUN npm install --global @ionic/cli
-RUN yes | ionic start APP tabs --type=react
-RUN cd APP && npm install node-sass
+# RUN yes | ionic start APP tabs --type=react
+# RUN cd APP && npm install node-sass
 
 RUN echo '\
 export PYTHONPATH=$HOME/DDD/ddd/src/python${PYTHONPATH:+":PYTHONPATH"}\

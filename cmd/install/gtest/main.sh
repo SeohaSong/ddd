@@ -1,4 +1,4 @@
-tgt_path=$DDD_PATH/ddd/src/cxx/gtest
+tgt_path=$DDD_PATH/src/cxx/gtest
 if [[ -d $tgt_path ]]
 then
     rm -rf $tgt_path
@@ -14,7 +14,6 @@ $( cat CMakeLists.txt )"
 echo "$txt" > CMakeLists.txt
 cmake .
 make
-mkdir $tgt_path/include
 cp -r googletest/include $tgt_path
 cp -r lib $tgt_path
 cd ..

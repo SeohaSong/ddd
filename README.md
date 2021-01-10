@@ -25,28 +25,30 @@ java
 
 ## rule
 ```
-.cmd: 프라이빗
--cmd: 세션유지
-abc => ((a)b)c
+_val: field-of-class
+val_: sub, tmep, prev, raw, core-origin, template
 
-_val: hidden, private
-val_: sub, template
-
-STATIC_VAL
-__glob_val__
-ClassName
-do_action (doAction)
-val
-vals
-valset
-valdata
-key2val
-duo
-val8val
-iter
-val_i (valI), idx
-val_n (valN), num
-val_s (valS), size
+no acronyms
+    GLOBAL_VALUE
+    ClassName
+    doAction, 
+    doAction__doAction, multi action
+acronyms
+    val
+    vals
+    key2val
+    val_iter
+    val_duo
+    val_set
+    val_dat
+    val_stk
+    val_i (valI), idx
+    val_n (valN), num
+    val_s (valS), size
+    val_t (valT), type
+    val_
+    new_val
+    val__val, multi val
 
 someName some_name some-name
 name.main name/main name__main name--some
@@ -64,17 +66,22 @@ asdf = {
     ....
 };
 --------------------
+--------------------
+asdf ?
+asdfasdf :
+asdfsafd
+
+new context
+--------------------
 asdf = {...+
         ....};
+--------------------
 --------------------
     asdf = "\
 ...
 ....";
 --------------------
-```
 
-## Naming for ml data
-```
 dataset
     meta
     recs
@@ -82,8 +89,8 @@ dataset
             featset
                 feat
         labels
-            label
+            ans
         rec
             featset
-            label
+            ans
 ```

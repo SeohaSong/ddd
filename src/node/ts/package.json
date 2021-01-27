@@ -1,0 +1,14 @@
+{
+	"version": "1.0.0",
+	"name": "ts",
+	"scripts": {
+		".": "bash ./cmd/run.sh",
+		"clean": "bash ./cmd/clean.sh"
+	},
+	"devDependencies": {
+		"typescript": "^4.1.3"
+	},
+	"dependencies": {
+		"npm": "^6.14.11"
+	}
+}

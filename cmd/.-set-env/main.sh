@@ -1,6 +1,6 @@
 export CLICOLOR=1
 
-local paths=$( echo "${PATH//':'/$'\n'}" | sort | uniq )
+local paths=$( echo "${PATH//':'/$'\n'}" | uniq )
 export PATH=${paths//$'\n'/':'}
 
 echo $DDD | tee $DDD_PATH/env/DDD > /dev/null

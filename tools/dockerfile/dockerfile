@@ -29,15 +29,21 @@ RUN apt install --yes --no-install-recommends make
 RUN DEBIAN_FRONTEND=noninteractive \
     apt install --yes --no-install-recommends cmake
 
+RUN apt install --yes --no-install-recommends rustc
+
+RUN apt install --yes --no-instal-recommends gccgo-go
+
+RUN apt install --yes --no-install-recommends default-jdk
+
+# swift 
+
 RUN apt install --yes --no-install-recommends python3-dev
 RUN apt install --yes --no-install-recommends python3-pip
 RUN ln --symbolic $( which python3 ) /usr/bin/python
 RUN ln --symbolic $( which pip3 ) /usr/bin/pip
 
-RUN curl -sL https://deb.nodesource.com/setup_12.x | bash
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash
 RUN apt install --yes --no-install-recommends nodejs
-
-RUN apt install --yes --no-install-recommends default-jdk
 
 RUN apt autoremove --yes
 
@@ -59,11 +65,7 @@ RUN echo 'export LC_ALL=C.UTF-8' >> /home/ddd/.bashrc
 ENV PATH=/home/ddd/.local/bin:$PATH
 RUN echo 'export PATH=$HOME/.local/bin${PATH:+":$PATH"}' >> /home/ddd/.bashrc
 
-RUN npm config set prefix /home/ddd/.local
-RUN npm install --global npm
-RUN npm install --global @ionic/cli
-# RUN yes | ionic start APP tabs --type=react
-# RUN cd APP && npm install node-sass
+# swift 
 
 RUN echo '\
 export PYTHONPATH=$HOME/DDD/ddd/src/python${PYTHONPATH:+":PYTHONPATH"}\
@@ -74,8 +76,6 @@ RUN python -m pip install --upgrade pycodestyle
 RUN python -m pip install --upgrade pylint
 RUN python -m pip install --upgrade pandas
 RUN python -m pip install --upgrade jupyter
-RUN python -m pip install --upgrade matplotlib
-RUN python -m pip install --upgrade flask
 
 ENV gradle_ver=6.6.1
 RUN wget https://services.gradle.org/distributions/gradle-$gradle_ver-bin.zip

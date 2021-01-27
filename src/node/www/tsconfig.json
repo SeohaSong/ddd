@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "alwaysStrict": true,
+        "lib": ["es6", "dom"]
+    },
+    "files": [
+        "./src/main.ts"
+    ]
+}

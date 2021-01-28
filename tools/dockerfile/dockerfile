@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-ENV dockerfile_ver=20210104
+ENV dockerfile_ver=20210129
 
 RUN apt update --yes
 RUN apt upgrade --yes
@@ -11,11 +11,6 @@ RUN apt install --yes --no-install-recommends wget
 RUN apt install --yes --no-install-recommends curl
 RUN apt install --yes --no-install-recommends unzip
 
-RUN apt install --yes --no-install-recommends sudo
-RUN echo '<PASSWORD/>\n<PASSWORD/>' | passwd
-RUN echo '<PASSWORD/>\n<PASSWORD/>' | adduser ddd
-RUN echo "ddd ALL=(ALL:ALL) ALL" >> /etc/sudoers
-
 RUN apt install --yes --no-install-recommends ssh
 ENV ssh_config_file=/etc/ssh/ssh_config
 RUN cat $ssh_config_file | \
@@ -24,29 +19,10 @@ RUN cat $ssh_config_file | \
 RUN mv ${ssh_config_file}_ $ssh_config_file
 RUN echo ServerAliveInterval 60 | tee -a $ssh_config_file > /dev/null
 
-RUN apt install --yes --no-install-recommends g++
-RUN apt install --yes --no-install-recommends make
-RUN DEBIAN_FRONTEND=noninteractive \
-    apt install --yes --no-install-recommends cmake
-
-RUN apt install --yes --no-install-recommends rustc
-
-RUN apt install --yes --no-install-recommends gccgo-go
-
-RUN apt install --yes --no-install-recommends default-jdk
-
-RUN apt install --yes --no-install-recommends libz3-4
-RUN apt install --yes --no-install-recommends libpython2.7
-
-RUN apt install --yes --no-install-recommends python3-dev
-RUN apt install --yes --no-install-recommends python3-pip
-RUN ln --symbolic $( which python3 ) /usr/bin/python
-RUN ln --symbolic $( which pip3 ) /usr/bin/pip
-
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash
-RUN apt install --yes --no-install-recommends nodejs
-
-RUN apt autoremove --yes
+RUN apt install --yes --no-install-recommends sudo
+RUN echo '<PASSWORD/>\n<PASSWORD/>' | passwd
+RUN echo '<PASSWORD/>\n<PASSWORD/>' | adduser ddd
+RUN echo "ddd ALL=(ALL:ALL) ALL" >> /etc/sudoers
 
 RUN mkdir /home/ddd/.ssh
 RUN chown ddd:ddd /home/ddd/.ssh
@@ -60,35 +36,77 @@ COPY id_rsa.pub /home/ddd/.ssh/authorized_keys
 RUN chown ddd:ddd /home/ddd/.ssh/authorized_keys
 RUN chmod 644 /home/ddd/.ssh/authorized_keys
 
-
 USER ddd
 WORKDIR /home/ddd
 RUN echo 'export LC_ALL=C.UTF-8' >> /home/ddd/.bashrc
+RUN mkdir /home/ddd/.local
+RUN mkdir /home/ddd/.local/lib
+RUN mkdir /home/ddd/.local/bin
 ENV PATH=/home/ddd/.local/bin:$PATH
-RUN echo 'export PATH=$HOME/.local/bin${PATH:+":$PATH"}' >> /home/ddd/.bashrc
 
+RUN echo 'export PATH=$HOME/.local/bin${PATH:+":$PATH"}' >> /home/ddd/.bashrc
+RUN echo '\
+export PYTHONPATH=$HOME/DDD/ddd/src/python${PYTHONPATH:+":PYTHONPATH"}\
+' >> /home/ddd/.bashrc
+RUN echo '. /home/ddd/DDD/ddd/cmd.sh profile' >> /home/ddd/.bashrc
+
+
+# cxx
+USER root
+RUN apt install --yes --no-install-recommends g++
+RUN apt install --yes --no-install-recommends make
+RUN DEBIAN_FRONTEND=noninteractive \
+    apt install --yes --no-install-recommends cmake
+
+
+# rust
+USER root
+RUN apt install --yes --no-install-recommends rustc
+
+
+# go
+USER root
+RUN apt install --yes --no-install-recommends gccgo-go
+
+
+# llvm
+USER root
+RUN apt install --yes --no-install-recommends libz3-4
+RUN apt install --yes --no-install-recommends libpython2.7
+
+USER ddd
 ENV swift_ver=5.3.2
 ENV swift_path=swift-$swift_ver-RELEASE-ubuntu20.04
-RUN wget \
-https://swift.org/builds/$swift_ver-release/ubuntu2004/$swift_ver-RELEASE/\
-$swift_path.tar.gz
-
+RUN wget --no-check-certificate \
+         https://swift.org/builds/swift-$swift_ver-release/ubuntu2004/swift-$swift_ver-RELEASE/$swift_path.tar.gz
 RUN tar -xvf $swift_path.tar.gz
 RUN rm $swift_path.tar.gz
 RUN mv $swift_path /home/ddd/.local/lib
 RUN ln -s /home/ddd/.local/lib/$swift_path/usr/bin/swift \
           /home/ddd/.local/bin/swift
 
-RUN echo '\
-export PYTHONPATH=$HOME/DDD/ddd/src/python${PYTHONPATH:+":PYTHONPATH"}\
-' >> /home/ddd/.bashrc
-RUN python -m pip install --upgrade pip
-RUN python -m pip install --upgrade pyinstaller
-RUN python -m pip install --upgrade pycodestyle
-RUN python -m pip install --upgrade pylint
-RUN python -m pip install --upgrade pandas
-RUN python -m pip install --upgrade jupyter
 
+# dotnet
+USER root
+
+RUN wget --no-check-certificate \
+         https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb
+
+RUN apt install --yes --no-install-recommends ca-certificates
+RUN dpkg --install packages-microsoft-prod.deb
+RUN rm packages-microsoft-prod.deb
+
+RUN apt update --yes
+RUN apt install --yes --no-install-recommends dotnet-sdk-5.0
+RUN apt install --yes --no-install-recommends dotnet-runtime-5.0
+RUN apt install --yes --no-install-recommends mono-mcs
+
+
+# jvm
+USER root
+RUN apt install --yes --no-install-recommends default-jdk
+
+USER ddd
 ENV gradle_ver=6.6.1
 ENV gradle_path=gradle-$gradle_ver
 RUN wget https://services.gradle.org/distributions/$gradle_path-bin.zip
@@ -98,4 +116,38 @@ RUN mv $gradle_path /home/ddd/.local/lib
 RUN ln -s /home/ddd/.local/lib/$gradle_path/bin/gradle \
           /home/ddd/.local/bin/gradle
 
-RUN echo '. /home/ddd/DDD/ddd/cmd.sh profile' >> /home/ddd/.bashrc
+USER root
+RUN apt install --yes --no-install-recommends zip
+
+USER ddd
+RUN curl -s https://get.sdkman.io | bash
+RUN cat /home/ddd/.sdkman/bin/sdkman-init.sh > temp.sh
+RUN echo "sdk install kotlin" >> temp.sh
+RUN bash temp.sh && rm temp.sh
+
+
+# node
+USER root
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash
+RUN apt install --yes --no-install-recommends nodejs
+
+
+# python
+USER root
+RUN apt install --yes --no-install-recommends python3-dev
+RUN apt install --yes --no-install-recommends python3-pip
+RUN ln --symbolic $( which python3 ) /usr/bin/python
+RUN ln --symbolic $( which pip3 ) /usr/bin/pip
+
+USER ddd
+RUN python -m pip install --upgrade pyinstaller
+RUN python -m pip install --upgrade pycodestyle
+RUN python -m pip install --upgrade pylint
+RUN python -m pip install --upgrade pandas
+RUN python -m pip install --upgrade jupyter
+
+
+USER root
+RUN apt autoremove --yes
+
+USER ddd

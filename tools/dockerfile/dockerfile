@@ -19,6 +19,9 @@ RUN cat $ssh_config_file | \
 RUN mv ${ssh_config_file}_ $ssh_config_file
 RUN echo ServerAliveInterval 60 | tee -a $ssh_config_file > /dev/null
 
+RUN apt install --yes --no-install-recommends doxygen
+RUN apt install --yes --no-install-recommends graphviz
+
 RUN apt install --yes --no-install-recommends sudo
 RUN echo '<PASSWORD/>\n<PASSWORD/>' | passwd
 RUN echo '<PASSWORD/>\n<PASSWORD/>' | adduser ddd

@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-ENV dockerfile_ver=20210129
+ENV dockerfile_ver=20210201
 
 RUN apt update --yes
 RUN apt upgrade --yes
@@ -72,37 +72,25 @@ USER root
 RUN apt install --yes --no-install-recommends gccgo-go
 
 
-# llvm
+# node
 USER root
-RUN apt install --yes --no-install-recommends libz3-4
-RUN apt install --yes --no-install-recommends libpython2.7
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash
+RUN apt install --yes --no-install-recommends nodejs
+
+
+# python
+USER root
+RUN apt install --yes --no-install-recommends python3-dev
+RUN apt install --yes --no-install-recommends python3-pip
+RUN ln --symbolic $( which python3 ) /usr/bin/python
+RUN ln --symbolic $( which pip3 ) /usr/bin/pip
 
 USER ddd
-ENV swift_ver=5.3.2
-ENV swift_path=swift-$swift_ver-RELEASE-ubuntu20.04
-RUN wget --no-check-certificate \
-         https://swift.org/builds/swift-$swift_ver-release/ubuntu2004/swift-$swift_ver-RELEASE/$swift_path.tar.gz
-RUN tar -xvf $swift_path.tar.gz
-RUN rm $swift_path.tar.gz
-RUN mv $swift_path /home/ddd/.local/lib
-RUN ln -s /home/ddd/.local/lib/$swift_path/usr/bin/swift \
-          /home/ddd/.local/bin/swift
-
-
-# dotnet
-USER root
-
-RUN wget --no-check-certificate \
-         https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb
-
-RUN apt install --yes --no-install-recommends ca-certificates
-RUN dpkg --install packages-microsoft-prod.deb
-RUN rm packages-microsoft-prod.deb
-
-RUN apt update --yes
-RUN apt install --yes --no-install-recommends dotnet-sdk-5.0
-RUN apt install --yes --no-install-recommends dotnet-runtime-5.0
-RUN apt install --yes --no-install-recommends mono-mcs
+RUN python -m pip install --upgrade pyinstaller
+RUN python -m pip install --upgrade pycodestyle
+RUN python -m pip install --upgrade pylint
+RUN python -m pip install --upgrade pandas
+RUN python -m pip install --upgrade jupyter
 
 
 # jvm
@@ -129,25 +117,21 @@ RUN echo "sdk install kotlin" >> temp.sh
 RUN bash temp.sh && rm temp.sh
 
 
-# node
+# swift
 USER root
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash
-RUN apt install --yes --no-install-recommends nodejs
-
-
-# python
-USER root
-RUN apt install --yes --no-install-recommends python3-dev
-RUN apt install --yes --no-install-recommends python3-pip
-RUN ln --symbolic $( which python3 ) /usr/bin/python
-RUN ln --symbolic $( which pip3 ) /usr/bin/pip
+RUN apt install --yes --no-install-recommends libz3-4
+RUN apt install --yes --no-install-recommends libpython2.7
 
 USER ddd
-RUN python -m pip install --upgrade pyinstaller
-RUN python -m pip install --upgrade pycodestyle
-RUN python -m pip install --upgrade pylint
-RUN python -m pip install --upgrade pandas
-RUN python -m pip install --upgrade jupyter
+ENV swift_ver=5.3.2
+ENV swift_path=swift-$swift_ver-RELEASE-ubuntu20.04
+RUN wget --no-check-certificate \
+         https://swift.org/builds/swift-$swift_ver-release/ubuntu2004/swift-$swift_ver-RELEASE/$swift_path.tar.gz
+RUN tar -xvf $swift_path.tar.gz
+RUN rm $swift_path.tar.gz
+RUN mv $swift_path /home/ddd/.local/lib
+RUN ln -s /home/ddd/.local/lib/$swift_path/usr/bin/swift \
+          /home/ddd/.local/bin/swift
 
 
 USER root

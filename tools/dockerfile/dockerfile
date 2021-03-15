@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-ENV dockerfile_ver=20210201
+ENV dockerfile_ver=20210308
 
 RUN apt update --yes
 RUN apt upgrade --yes
@@ -62,11 +62,6 @@ RUN DEBIAN_FRONTEND=noninteractive \
     apt install --yes --no-install-recommends cmake
 
 
-# rust
-USER root
-RUN apt install --yes --no-install-recommends rustc
-
-
 # go
 USER root
 RUN apt install --yes --no-install-recommends gccgo-go
@@ -74,8 +69,16 @@ RUN apt install --yes --no-install-recommends gccgo-go
 
 # node
 USER root
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash
-RUN apt install --yes --no-install-recommends nodejs
+RUN apt install xz-utils
+
+ENV node_path=node-v14.16.0-linux-x64
+RUN wget --no-check-certificate https://nodejs.org/dist/v14.16.0/${node_path}.tar.xz
+RUN tar -xvf ${node_path}.tar.xz
+RUN rm ${node_path}.tar.xz
+RUN mv ${node_path} /home/ddd/.local/lib
+RUN ln -s /home/ddd/.local/lib/${node_path}/bin/node /home/ddd/.local/bin/node
+RUN ln -s /home/ddd/.local/lib/${node_path}/bin/npm /home/ddd/.local/bin/npm
+RUN ln -s /home/ddd/.local/lib/${node_path}/bin/npx /home/ddd/.local/bin/npx
 
 
 # python
@@ -104,8 +107,10 @@ RUN wget https://services.gradle.org/distributions/$gradle_path-bin.zip
 RUN unzip $gradle_path-bin.zip
 RUN rm $gradle_path-bin.zip
 RUN mv $gradle_path /home/ddd/.local/lib
-RUN ln -s /home/ddd/.local/lib/$gradle_path/bin/gradle \
-          /home/ddd/.local/bin/gradle
+RUN ln -s /home/ddd/.local/lib/$gradle_path/bin/gradle /home/ddd/.local/bin/gradle
+
+
+# kotlin
 
 USER root
 RUN apt install --yes --no-install-recommends zip
@@ -125,13 +130,11 @@ RUN apt install --yes --no-install-recommends libpython2.7
 USER ddd
 ENV swift_ver=5.3.2
 ENV swift_path=swift-$swift_ver-RELEASE-ubuntu20.04
-RUN wget --no-check-certificate \
-         https://swift.org/builds/swift-$swift_ver-release/ubuntu2004/swift-$swift_ver-RELEASE/$swift_path.tar.gz
+RUN wget --no-check-certificate https://swift.org/builds/swift-$swift_ver-release/ubuntu2004/swift-$swift_ver-RELEASE/$swift_path.tar.gz
 RUN tar -xvf $swift_path.tar.gz
 RUN rm $swift_path.tar.gz
 RUN mv $swift_path /home/ddd/.local/lib
-RUN ln -s /home/ddd/.local/lib/$swift_path/usr/bin/swift \
-          /home/ddd/.local/bin/swift
+RUN ln -s /home/ddd/.local/lib/$swift_path/usr/bin/swift /home/ddd/.local/bin/swift
 
 
 USER root

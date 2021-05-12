@@ -1,15 +1,22 @@
 FROM ubuntu:20.04
 
-ENV dockerfile_ver=20210308
+ENV dockerfile_ver=20210510
 
 RUN apt update --yes
 RUN apt upgrade --yes
+
 
 RUN apt install --yes --no-install-recommends vim
 RUN apt install --yes --no-install-recommends git
 RUN apt install --yes --no-install-recommends wget
 RUN apt install --yes --no-install-recommends curl
+RUN apt install --yes --no-install-recommends zip
 RUN apt install --yes --no-install-recommends unzip
+RUN apt install --yes --no-install-recommends valgrind
+RUN apt install --yes --no-install-recommends doxygen
+RUN apt install --yes --no-install-recommends graphviz
+RUN DEBIAN_FRONTEND=noninteractive \
+    apt install --yes --no-install-recommends dnsutils
 
 RUN apt install --yes --no-install-recommends ssh
 ENV ssh_config_file=/etc/ssh/ssh_config
@@ -18,9 +25,6 @@ RUN cat $ssh_config_file | \
     tee ${ssh_config_file}_ > /dev/null
 RUN mv ${ssh_config_file}_ $ssh_config_file
 RUN echo ServerAliveInterval 60 | tee -a $ssh_config_file > /dev/null
-
-RUN apt install --yes --no-install-recommends doxygen
-RUN apt install --yes --no-install-recommends graphviz
 
 RUN apt install --yes --no-install-recommends sudo
 RUN echo '<PASSWORD/>\n<PASSWORD/>' | passwd
@@ -60,11 +64,7 @@ RUN apt install --yes --no-install-recommends g++
 RUN apt install --yes --no-install-recommends make
 RUN DEBIAN_FRONTEND=noninteractive \
     apt install --yes --no-install-recommends cmake
-
-
-# go
-USER root
-RUN apt install --yes --no-install-recommends gccgo-go
+RUN apt install --yes --no-install-recommends gdb
 
 
 # node
@@ -96,11 +96,17 @@ RUN python -m pip install --upgrade pandas
 RUN python -m pip install --upgrade jupyter
 
 
+# go
+USER root
+RUN apt install --yes --no-install-recommends gccgo-go
+
+
 # jvm
 USER root
 RUN apt install --yes --no-install-recommends default-jdk
 
 USER ddd
+
 ENV gradle_ver=6.6.1
 ENV gradle_path=gradle-$gradle_ver
 RUN wget https://services.gradle.org/distributions/$gradle_path-bin.zip
@@ -109,13 +115,6 @@ RUN rm $gradle_path-bin.zip
 RUN mv $gradle_path /home/ddd/.local/lib
 RUN ln -s /home/ddd/.local/lib/$gradle_path/bin/gradle /home/ddd/.local/bin/gradle
 
-
-# kotlin
-
-USER root
-RUN apt install --yes --no-install-recommends zip
-
-USER ddd
 RUN curl -s https://get.sdkman.io | bash
 RUN cat /home/ddd/.sdkman/bin/sdkman-init.sh > temp.sh
 RUN echo "sdk install kotlin" >> temp.sh
@@ -130,11 +129,13 @@ RUN apt install --yes --no-install-recommends libpython2.7
 USER ddd
 ENV swift_ver=5.3.2
 ENV swift_path=swift-$swift_ver-RELEASE-ubuntu20.04
-RUN wget --no-check-certificate https://swift.org/builds/swift-$swift_ver-release/ubuntu2004/swift-$swift_ver-RELEASE/$swift_path.tar.gz
+RUN wget --no-check-certificate \
+    https://swift.org/builds/swift-$swift_ver-release/ubuntu2004/swift-$swift_ver-RELEASE/$swift_path.tar.gz
 RUN tar -xvf $swift_path.tar.gz
 RUN rm $swift_path.tar.gz
 RUN mv $swift_path /home/ddd/.local/lib
-RUN ln -s /home/ddd/.local/lib/$swift_path/usr/bin/swift /home/ddd/.local/bin/swift
+RUN ln -s /home/ddd/.local/lib/$swift_path/usr/bin/swift \
+          /home/ddd/.local/bin/swift
 
 
 USER root

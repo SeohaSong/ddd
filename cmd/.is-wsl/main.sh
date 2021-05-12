@@ -1,6 +1,6 @@
-if [[ ! -z "$( which wsl.exe )" ]]
+if [[ -z "$( ls /usr/bin | grep "^wsl" )" ]]
 then
-    return 0
-else
     return 1
+else
+    return 0
 fi

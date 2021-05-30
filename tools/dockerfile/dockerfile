@@ -84,9 +84,8 @@ RUN ln -s /home/ddd/.local/lib/${node_path}/bin/npx /home/ddd/.local/bin/npx
 # python
 USER root
 RUN apt install --yes --no-install-recommends python3-dev
-RUN apt install --yes --no-install-recommends python3-pip
 RUN ln --symbolic $( which python3 ) /usr/bin/python
-RUN ln --symbolic $( which pip3 ) /usr/bin/pip
+RUN apt install --yes --no-install-recommends python3-pip
 
 USER ddd
 RUN python -m pip install --upgrade pyinstaller
@@ -94,11 +93,6 @@ RUN python -m pip install --upgrade pycodestyle
 RUN python -m pip install --upgrade pylint
 RUN python -m pip install --upgrade pandas
 RUN python -m pip install --upgrade jupyter
-
-
-# go
-USER root
-RUN apt install --yes --no-install-recommends gccgo-go
 
 
 # jvm

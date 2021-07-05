@@ -88,6 +88,7 @@ RUN ln --symbolic $( which python3 ) /usr/bin/python
 RUN apt install --yes --no-install-recommends python3-pip
 
 USER ddd
+RUN python -m pip install --upgrade pip
 RUN python -m pip install --upgrade pyinstaller
 RUN python -m pip install --upgrade pycodestyle
 RUN python -m pip install --upgrade pylint

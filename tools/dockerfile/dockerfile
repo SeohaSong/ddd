@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-ENV dockerfile_ver=20210510
+ENV dockerfile_ver=20210706
 
 RUN apt update --yes
 RUN apt upgrade --yes
@@ -92,8 +92,9 @@ RUN python -m pip install --upgrade pip
 RUN python -m pip install --upgrade pyinstaller
 RUN python -m pip install --upgrade pycodestyle
 RUN python -m pip install --upgrade pylint
-RUN python -m pip install --upgrade pandas
 RUN python -m pip install --upgrade jupyter
+RUN python -m pip install --upgrade pandas
+RUN python -m pip install --upgrade tensorflow
 
 
 # jvm

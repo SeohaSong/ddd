@@ -4,19 +4,25 @@
 using namespace std;
 
 
-int& getRvalueAsLvalue(int&& val)
+int& getRValueAsLValue(int&& val)
 {
-    cout << &val << endl;
     return ++val;
 }
 
-void checkRvalueAddress(int&& val)
+void checkRValueAddress(int&& val)
 {
     cout << &val << endl;
 }
+void checkRValueAddress(const char&& val)
+{
+    cout << (void*)&val << endl;
+}
+void checkRValueAddress(const char*&& val)
+{
+    for (; *val; cout << (void*)val++ << endl);
+}
 
-
-int getRvalue()
+int getRValue()
 {
     return 0;
 }
@@ -24,18 +30,27 @@ int getRvalue()
 
 int main()
 {
-    cout << &getRvalueAsLvalue(0) << endl;
-
-    int& val = getRvalueAsLvalue(0);
+    cout << &getRValueAsLValue(0) << endl;
+    int& val = getRValueAsLValue(0);
+    cout << &val << endl;
     cout << val << endl;
-    getRvalueAsLvalue(10);
+    getRValueAsLValue(10);
     cout << val << endl;
+    cout << endl;
 
-    checkRvalueAddress(1);
-    checkRvalueAddress(1 + 1);
+    checkRValueAddress(1);
+    checkRValueAddress(1 + 1);
+    checkRValueAddress('a');
+    cout << endl;
 
-    int&& rvalue = getRvalue();
-    cout << &rvalue << endl;
+    checkRValueAddress("a");
+    checkRValueAddress("a");
+    cout << endl;
+
+    int&& r_val1 = getRValue();
+    cout << &r_val1 << endl;
+    int&& r_val2 = getRValue();
+    cout << &r_val2 << endl;
 
     return 0;
 }

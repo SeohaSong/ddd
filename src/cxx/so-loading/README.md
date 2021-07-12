@@ -1,0 +1,5 @@
+- https://yaaam.tistory.com/entry/Linux-%EB%8F%99%EC%A0%81-%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC-%EB%A1%9C%EB%93%9C-dlopen-dlsym-dlclose-dlerror
+	- valgrind - massif - visualizador
+	- valgrind --log-file=memcheck.txt --leak-check=full --show-leak-kinds=all  + 실행명령어
+	- --no-gnu-unique
+		- https://stackoverflow.com/questions/38869657/dlclose-not-unloading-so-file-which-is-linking-to-boost

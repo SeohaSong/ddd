@@ -1,23 +1,21 @@
-FROM ubuntu:20.04
+FROM tensorflow/tensorflow:custom-op-gpu-ubuntu16
 
-ENV dockerfile_ver=20210706
+ENV ubuntu_ver=16.04
+ENV ubuntu_ver_=1604
+ENV dockerfile_ver=20210713
 
+
+# default
 RUN apt update --yes
-RUN apt upgrade --yes
 
-
-RUN apt install --yes --no-install-recommends vim
-RUN apt install --yes --no-install-recommends git
-RUN apt install --yes --no-install-recommends wget
-RUN apt install --yes --no-install-recommends curl
-RUN apt install --yes --no-install-recommends zip
-RUN apt install --yes --no-install-recommends unzip
 RUN apt install --yes --no-install-recommends valgrind
 RUN apt install --yes --no-install-recommends doxygen
 RUN apt install --yes --no-install-recommends graphviz
-RUN DEBIAN_FRONTEND=noninteractive \
-    apt install --yes --no-install-recommends dnsutils
+RUN DEBIAN_FRONTEND=noninteractive\
+     apt install --yes --no-install-recommends dnsutils
 
+
+# ddd
 RUN apt install --yes --no-install-recommends ssh
 ENV ssh_config_file=/etc/ssh/ssh_config
 RUN cat $ssh_config_file | \
@@ -26,7 +24,6 @@ RUN cat $ssh_config_file | \
 RUN mv ${ssh_config_file}_ $ssh_config_file
 RUN echo ServerAliveInterval 60 | tee -a $ssh_config_file > /dev/null
 
-RUN apt install --yes --no-install-recommends sudo
 RUN echo '<PASSWORD/>\n<PASSWORD/>' | passwd
 RUN echo '<PASSWORD/>\n<PASSWORD/>' | adduser ddd
 RUN echo "ddd ALL=(ALL:ALL) ALL" >> /etc/sudoers
@@ -51,65 +48,54 @@ RUN mkdir /home/ddd/.local/lib
 RUN mkdir /home/ddd/.local/bin
 ENV PATH=/home/ddd/.local/bin:$PATH
 
+RUN echo 'export PATH=/usr/local/cuda/bin${PATH:+":$PATH"}' >> /home/ddd/.bashrc
 RUN echo 'export PATH=$HOME/.local/bin${PATH:+":$PATH"}' >> /home/ddd/.bashrc
-RUN echo '\
-export PYTHONPATH=$HOME/DDD/ddd/src/python${PYTHONPATH:+":PYTHONPATH"}\
-' >> /home/ddd/.bashrc
-RUN echo '. /home/ddd/DDD/ddd/cmd.sh profile' >> /home/ddd/.bashrc
+RUN echo\
+ 'export PYTHONPATH=$HOME/DDD/ddd/src/python${PYTHONPATH:+":PYTHONPATH"}'\
+ >> /home/ddd/.bashrc
+RUN echo '. $HOME/DDD/ddd/cmd.sh profile' >> /home/ddd/.bashrc
 
 
 # cxx
 USER root
-RUN apt install --yes --no-install-recommends g++
-RUN apt install --yes --no-install-recommends make
-RUN DEBIAN_FRONTEND=noninteractive \
-    apt install --yes --no-install-recommends cmake
 RUN apt install --yes --no-install-recommends gdb
 
 
 # node
 USER root
-RUN apt install xz-utils
-
-ENV node_path=node-v14.16.0-linux-x64
-RUN wget --no-check-certificate https://nodejs.org/dist/v14.16.0/${node_path}.tar.xz
-RUN tar -xvf ${node_path}.tar.xz
-RUN rm ${node_path}.tar.xz
-RUN mv ${node_path} /home/ddd/.local/lib
-RUN ln -s /home/ddd/.local/lib/${node_path}/bin/node /home/ddd/.local/bin/node
-RUN ln -s /home/ddd/.local/lib/${node_path}/bin/npm /home/ddd/.local/bin/npm
-RUN ln -s /home/ddd/.local/lib/${node_path}/bin/npx /home/ddd/.local/bin/npx
+ENV node_ver=14.17.3
+ENV node_path=node-v$node_ver-linux-x64
+RUN wget --no-check-certificate\
+     https://nodejs.org/dist/v$node_ver/$node_path.tar.xz
+RUN tar -xvf $node_path.tar.xz
+RUN rm $node_path.tar.xz
+RUN mv $node_path /home/ddd/.local/lib
+RUN ln -s /home/ddd/.local/lib/$node_path/bin/node /home/ddd/.local/bin/node
+RUN ln -s /home/ddd/.local/lib/$node_path/bin/npm /home/ddd/.local/bin/npm
+RUN ln -s /home/ddd/.local/lib/$node_path/bin/npx /home/ddd/.local/bin/npx
 
 
 # python
-USER root
-RUN apt install --yes --no-install-recommends python3-dev
-RUN ln --symbolic $( which python3 ) /usr/bin/python
-RUN apt install --yes --no-install-recommends python3-pip
-
 USER ddd
 RUN python -m pip install --upgrade pip
 RUN python -m pip install --upgrade pyinstaller
-RUN python -m pip install --upgrade pycodestyle
-RUN python -m pip install --upgrade pylint
 RUN python -m pip install --upgrade jupyter
+RUN python -m pip install --upgrade scikit-learn
+
 RUN python -m pip install --upgrade pandas
-RUN python -m pip install --upgrade tensorflow
+RUN python -m pip install jedi==0.17.2
 
 
 # jvm
-USER root
-RUN apt install --yes --no-install-recommends default-jdk
-
 USER ddd
-
-ENV gradle_ver=6.6.1
+ENV gradle_ver=7.1.1
 ENV gradle_path=gradle-$gradle_ver
 RUN wget https://services.gradle.org/distributions/$gradle_path-bin.zip
 RUN unzip $gradle_path-bin.zip
 RUN rm $gradle_path-bin.zip
 RUN mv $gradle_path /home/ddd/.local/lib
-RUN ln -s /home/ddd/.local/lib/$gradle_path/bin/gradle /home/ddd/.local/bin/gradle
+RUN ln -s\
+     /home/ddd/.local/lib/$gradle_path/bin/gradle /home/ddd/.local/bin/gradle
 
 RUN curl -s https://get.sdkman.io | bash
 RUN cat /home/ddd/.sdkman/bin/sdkman-init.sh > temp.sh
@@ -118,20 +104,19 @@ RUN bash temp.sh && rm temp.sh
 
 
 # swift
-USER root
-RUN apt install --yes --no-install-recommends libz3-4
-RUN apt install --yes --no-install-recommends libpython2.7
-
 USER ddd
-ENV swift_ver=5.3.2
-ENV swift_path=swift-$swift_ver-RELEASE-ubuntu20.04
-RUN wget --no-check-certificate \
-    https://swift.org/builds/swift-$swift_ver-release/ubuntu2004/swift-$swift_ver-RELEASE/$swift_path.tar.gz
+ENV swift_ver=5.4.2
+ENV swift_path=swift-$swift_ver-RELEASE-ubuntu$ubuntu_ver
+RUN wget --no-check-certificate\
+     https://swift.org/builds/swift-$swift_ver-release/ubuntu$ubuntu_ver_/swift-$swift_ver-RELEASE/$swift_path.tar.gz
 RUN tar -xvf $swift_path.tar.gz
 RUN rm $swift_path.tar.gz
 RUN mv $swift_path /home/ddd/.local/lib
-RUN ln -s /home/ddd/.local/lib/$swift_path/usr/bin/swift \
-          /home/ddd/.local/bin/swift
+RUN ln -s\
+     /home/ddd/.local/lib/$swift_path/usr/bin/swift /home/ddd/.local/bin/swift
+
+USER root
+RUN apt install --yes --no-install-recommends libpython3.7
 
 
 USER root

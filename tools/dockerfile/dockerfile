@@ -53,7 +53,7 @@ RUN echo 'export PATH=$HOME/.local/bin${PATH:+":$PATH"}' >> /home/ddd/.bashrc
 RUN echo\
  'export PYTHONPATH=$HOME/DDD/ddd/src/python${PYTHONPATH:+":PYTHONPATH"}'\
  >> /home/ddd/.bashrc
-RUN echo '. $HOME/DDD/ddd/cmd.sh profile' >> /home/ddd/.bashrc
+RUN echo '. /home/ddd/DDD/ddd/cmd.sh profile' >> /home/ddd/.bashrc
 
 
 # cxx

@@ -2,7 +2,7 @@ FROM tensorflow/tensorflow:custom-op-gpu-ubuntu16
 
 ENV ubuntu_ver=16.04
 ENV ubuntu_ver_=1604
-ENV dockerfile_ver=20210713
+ENV dockerfile_ver=20210716
 
 
 # default

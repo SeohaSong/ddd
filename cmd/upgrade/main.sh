@@ -4,6 +4,4 @@ sudo apt autoremove --yes || :
 if $( systemctl status snap &> /dev/null )
 then
     sudo snap refresh || :
-else
-    ddd echo 'Snap is not available now.'
 fi

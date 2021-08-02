@@ -29,14 +29,14 @@ then
 fi
 
 docker run\
-    $gpu_opt $net_opt\
-    --interactive --rm --tty --detach\
-    --gpus all\
-    --name $name\
-    --workdir /home/ddd/DDD/$path\
-    --volume $DDD_PATH:/home/ddd/DDD\
-    $name
+ --interactive --rm --tty --detach --privileged\
+ $net_opt\
+ --gpus all\
+ --name $name\
+ --workdir /home/ddd/DDD/$path\
+ --volume $DDD_PATH:/home/ddd/DDD\
+ $name
 
 echo Port 2222\
- | docker exec --interactive --user root ddd tee /etc/ssh/sshd_config
+| docker exec --interactive --user root ddd tee /etc/ssh/sshd_config
 docker exec --user root ddd service ssh start

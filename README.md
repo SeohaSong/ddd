@@ -1,7 +1,9 @@
 # DDD (DDELA DDOLA DDE)
-> ### *"The core-package for every-project."*
+> ### *"The frameworks for common project."*
 
-## Naming convention for M.L. domain
+## Convention
+
+- M.L.
 ```
 meta
     tokens
@@ -16,7 +18,7 @@ data
         feat
 ```
 
-## Naming convention for O.O.P.
+- Code
 ```
 self
     _val VAL __val__

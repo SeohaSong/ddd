@@ -1,37 +1,26 @@
-FROM nvidia/cuda:10.2-devel-ubuntu18.04
+FROM tensorflow/tensorflow:latest-gpu
 
-ENV dockerfile_ver=20210802
+ENV dockerfile_ver=20210803
 
-ENV ubuntu_ver_=1804
 ENV ubuntu_ver=18.04
 
 
 # default
-# RUN apt update --yes
+USER root
+RUN apt update --yes
 
-# RUN apt install --yes --no-install-recommends valgrind
-# RUN apt install --yes --no-install-recommends doxygen
-# RUN apt install --yes --no-install-recommends graphviz
-# RUN DEBIAN_FRONTEND=noninteractive\
-#      apt install --yes --no-install-recommends dnsutils
-
-
-# ddd
-RUN apt install --yes --no-install-recommends ssh
 RUN apt install --yes --no-install-recommends sudo
+RUN echo $'<PASSWORD/>\n<PASSWORD/>' | passwd
+RUN echo $'<PASSWORD/>\n<PASSWORD/>' | adduser ddd
+RUN echo "ddd ALL=(ALL:ALL) ALL" >> /etc/sudoers
+
+RUN apt install --yes --no-install-recommends ssh
 ENV ssh_config_file=/etc/ssh/ssh_config
 RUN cat $ssh_config_file\
     | grep -v ServerAliveInterval\
     | tee ${ssh_config_file}_ > /dev/null
 RUN mv ${ssh_config_file}_ $ssh_config_file
 RUN echo ServerAliveInterval 60 | tee -a $ssh_config_file > /dev/null
-
-# RUN echo $'<PASSWORD/>\n<PASSWORD/>' | passwd
-# RUN echo $'<PASSWORD/>\n<PASSWORD/>' | adduser ddd
-RUN echo '<PASSWORD/>\n<PASSWORD/>' | passwd
-RUN echo '<PASSWORD/>\n<PASSWORD/>' | adduser ddd
-RUN echo "ddd ALL=(ALL:ALL) ALL" >> /etc/sudoers
-
 RUN mkdir /home/ddd/.ssh
 RUN chown ddd:ddd /home/ddd/.ssh
 COPY id_rsa /home/ddd/.ssh/id_rsa
@@ -46,12 +35,11 @@ RUN chmod 644 /home/ddd/.ssh/authorized_keys
 
 USER ddd
 WORKDIR /home/ddd
-RUN echo 'export LC_ALL=C.UTF-8' >> /home/ddd/.bashrc
 RUN mkdir /home/ddd/.local
 RUN mkdir /home/ddd/.local/lib
 RUN mkdir /home/ddd/.local/bin
 ENV PATH=/home/ddd/.local/bin:$PATH
-
+RUN echo 'export LC_ALL=C.UTF-8' >> /home/ddd/.bashrc
 RUN echo 'export PATH=/usr/local/cuda/bin${PATH:+":$PATH"}' >> /home/ddd/.bashrc
 RUN echo 'export PATH=$HOME/.local/bin${PATH:+":$PATH"}' >> /home/ddd/.bashrc
 RUN echo\
@@ -59,69 +47,85 @@ RUN echo\
     >> /home/ddd/.bashrc
 RUN echo '. /home/ddd/DDD/ddd/cmd.sh profile' >> /home/ddd/.bashrc
 
-
-# # cxx
-# USER root
-# RUN apt install --yes --no-install-recommends cmake
-# RUN apt install --yes --no-install-recommends gdb
-
-
-# # python
-# USER ddd
-# RUN python -m pip install --upgrade pip
-# RUN python -m pip install pyinstaller
-# RUN python -m pip install jupyter
-# pandas scikit-learn matplotlib
+USER root
+RUN apt install --yes --no-install-recommends zip
+RUN apt install --yes --no-install-recommends wget
+RUN apt install --yes --no-install-recommends vim
 
 
-# # node
-# USER root
-# ENV node_ver=14.17.4
-# ENV node_path=node-v$node_ver-linux-x64
-# RUN wget --no-check-certificate \
-#      https://nodejs.org/dist/v$node_ver/$node_path.tar.xz
-# RUN tar -xvf $node_path.tar.xz
-# RUN rm $node_path.tar.xz
-# RUN mv $node_path /home/ddd/.local/lib
-# RUN ln -s /home/ddd/.local/lib/$node_path/bin/node /home/ddd/.local/bin/node
-# RUN ln -s /home/ddd/.local/lib/$node_path/bin/npm /home/ddd/.local/bin/npm
-# RUN ln -s /home/ddd/.local/lib/$node_path/bin/npx /home/ddd/.local/bin/npx
+# jvm
+USER ddd
+ENV gradle_ver=7.1.1
+ENV gradle_path=gradle-$gradle_ver
+RUN wget https://services.gradle.org/distributions/$gradle_path-bin.zip
+RUN unzip $gradle_path-bin.zip
+RUN rm $gradle_path-bin.zip
+RUN mv $gradle_path /home/ddd/.local/lib
+RUN ln -s\
+     /home/ddd/.local/lib/$gradle_path/bin/gradle /home/ddd/.local/bin/gradle
+
+USER ddd
+RUN curl -s https://get.sdkman.io | bash
+RUN cat /home/ddd/.sdkman/bin/sdkman-init.sh > temp.sh
+RUN echo "sdk install kotlin" >> temp.sh
+RUN bash temp.sh && rm temp.sh
 
 
-# # jvm
-# USER ddd
-# ENV gradle_ver=7.1.1
-# ENV gradle_path=gradle-$gradle_ver
-# RUN wget https://services.gradle.org/distributions/$gradle_path-bin.zip
-# RUN unzip $gradle_path-bin.zip
-# RUN rm $gradle_path-bin.zip
-# RUN mv $gradle_path /home/ddd/.local/lib
-# RUN ln -s\
-#      /home/ddd/.local/lib/$gradle_path/bin/gradle /home/ddd/.local/bin/gradle
-
-# RUN curl -s https://get.sdkman.io | bash
-# RUN cat /home/ddd/.sdkman/bin/sdkman-init.sh > temp.sh
-# RUN echo "sdk install kotlin" >> temp.sh
-# RUN bash temp.sh && rm temp.sh
-
-
-# # swift
-# USER ddd
-# ENV swift_ver=5.4.2
-# ENV swift_path=swift-$swift_ver-RELEASE-ubuntu$ubuntu_ver
-# RUN wget --no-check-certificate\
-#      https://swift.org/builds/swift-$swift_ver-release/ubuntu$ubuntu_ver_/swift-$swift_ver-RELEASE/$swift_path.tar.gz
-# RUN tar -xvf $swift_path.tar.gz
-# RUN rm $swift_path.tar.gz
-# RUN mv $swift_path /home/ddd/.local/lib
-# RUN ln -s\
-#      /home/ddd/.local/lib/$swift_path/usr/bin/swift /home/ddd/.local/bin/swift
-
-# USER root
-# RUN apt install --yes --no-install-recommends libpython3.7
-
+# swift
+USER ddd
+ENV swift_ver=5.4.2
+ENV swift_path=swift-$swift_ver-RELEASE-ubuntu$ubuntu_ver
+RUN wget --no-check-certificate "\
+https://swift.org/builds/swift-$swift_ver-release/\
+ubuntu${ubuntu_ver//./}/swift-$swift_ver-RELEASE/$swift_path.tar.gz"
+RUN tar -xvf $swift_path.tar.gz
+RUN rm $swift_path.tar.gz
+RUN mv $swift_path /home/ddd/.local/lib
+RUN ln -s\
+     /home/ddd/.local/lib/$swift_path/usr/bin/swift /home/ddd/.local/bin/swift
 
 USER root
-RUN apt autoremove --yes
+RUN apt install --yes --no-install-recommends libxml2
 
+
+# cxx
+USER root
+RUN apt install --yes --no-install-recommends cmake
+RUN apt install --yes --no-install-recommends gdb
+
+
+# node
+USER root
+ENV node_ver=14.17.4
+ENV node_path=node-v$node_ver-linux-x64
+RUN wget --no-check-certificate \
+     https://nodejs.org/dist/v$node_ver/$node_path.tar.xz
+RUN tar -xvf $node_path.tar.xz
+RUN rm $node_path.tar.xz
+RUN mv $node_path /home/ddd/.local/lib
+RUN ln -s /home/ddd/.local/lib/$node_path/bin/node /home/ddd/.local/bin/node
+RUN ln -s /home/ddd/.local/lib/$node_path/bin/npm /home/ddd/.local/bin/npm
+RUN ln -s /home/ddd/.local/lib/$node_path/bin/npx /home/ddd/.local/bin/npx
+
+
+# python
+USER ddd
+RUN python -m pip install --upgrade pip
+RUN python -m pip install pyinstaller
+RUN python -m pip install jupyter
+RUN python -m pip install pandas
+RUN python -m pip install scikit-learn
+RUN python -m pip install matplotlib
+
+
+# default
+USER root
+RUN apt install --yes --no-install-recommends valgrind
+RUN apt install --yes --no-install-recommends doxygen
+RUN apt install --yes --no-install-recommends graphviz
+RUN DEBIAN_FRONTEND=noninteractive\
+     apt install --yes --no-install-recommends dnsutils
+RUN apt install --yes --no-install-recommends gnome-keyring
+RUN apt install --yes --no-install-recommends chromium-browser
+RUN apt autoremove --yes
 USER ddd

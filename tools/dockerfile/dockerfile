@@ -112,10 +112,10 @@ RUN ln -s /home/ddd/.local/lib/$node_path/bin/npx /home/ddd/.local/bin/npx
 USER ddd
 RUN python -m pip install --upgrade pip
 RUN python -m pip install pyinstaller
-RUN python -m pip install jupyter
 RUN python -m pip install pandas
 RUN python -m pip install scikit-learn
 RUN python -m pip install matplotlib
+RUN python -m pip install jupyter jedi==0.17.2
 
 
 # default

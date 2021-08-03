@@ -18,14 +18,16 @@ data
 
 ## Naming convention for O.O.P.
 ```
-i k v d
-key2duo
-ct sz
-
-self context
-    _val VAL
+self
+    _val VAL __val__
     __function function
-main context
-    val _VAL VAL 
+main
+    val _VAL VAL __val__
     __function runFunction
+symbol
+    i k v d
+    ct sz
+grammer
+    key2duo
+    val val_ vals
 ```

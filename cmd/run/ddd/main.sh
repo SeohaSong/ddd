@@ -10,23 +10,22 @@ then
     fi
 fi
 
-name=ddd
 path=.
-net_opt='--publish 2222:2222
-         --publish 8000:8000
-         --publish 8100:8100
-         --publish 8888:8888'
-
 if [[ $PWD != $DDD_PATH && $PWD =~ $DDD_PATH ]]
 then
     path=${PWD#$DDD_PATH/}
 fi
 
-if ! $DDD .is-wsl
+net_opt='--network host'
+if $DDD .is-wsl
 then
-    net_opt='--network host'
+    net_opt='--publish 2222:2222
+             --publish 8000:8000
+             --publish 8100:8100
+             --publish 8888:8888'
 fi
 
+name=ddd
 docker run\
  --interactive --rm --tty --detach --privileged\
  $net_opt\

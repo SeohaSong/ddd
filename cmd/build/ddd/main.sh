@@ -2,19 +2,19 @@
 
 cd $( dirname $BASH_SOURCE )
 
-if [ -d __tmp__ ]
+if [[ -d .temp ]]
 then
-    rm -rf __tmp__
+    rm -rf .temp
 fi
-mkdir __tmp__
+mkdir .temp
 
-echo "$KEY" | tee __tmp__/id_rsa > /dev/null
-echo "$PUB_KEY" | tee __tmp__/id_rsa.pub > /dev/null
-file=__tmp__/dockerfile
-cp $DDD_PATH/ddd/tools/dockerfile/dockerfile __tmp__
+echo "$KEY" | tee .temp/id_rsa > /dev/null
+echo "$PUB_KEY" | tee .temp/id_rsa.pub > /dev/null
+cp $DDD_PATH/ddd/tools/dockerfile/dockerfile .temp
 
-txt=$( cat $file )
-echo "$txt" | sed -e "s/<PASSWORD\/>/$PASSWORD/g" | tee $file > /dev/null
+file=.temp/dockerfile
+lines=$( cat $file )
+echo "$lines" | sed -e "s/<PASSWORD\/>/$PASSWORD/g" | tee $file > /dev/null
 
 net_opt='--network host'
 if $DDD .is-wsl
@@ -22,6 +22,6 @@ then
     net_opt=
 fi
 
-docker build --tag ddd $net_opt __tmp__
+docker build --tag ddd $net_opt .temp
 
-rm -r __tmp__
+rm -r .temp

@@ -1,13 +1,23 @@
 FROM tensorflow/tensorflow:latest-gpu
 
-ENV dockerfile_ver=20210803
-
-ENV ubuntu_ver=18.04
+ENV TIME_ZONE=/Asia/Seoul
+ENV UBUNTU_VER=18.04
+ENV DOCKERFILE_VER=20210804
 
 
 # default
 USER root
 RUN apt update --yes
+
+RUN apt install --yes --no-install-recommends zip
+RUN apt install --yes --no-install-recommends wget
+RUN apt install --yes --no-install-recommends vim
+
+RUN DEBIAN_FRONTEND=noninteractive\
+     apt --yes --no-install-recommends install tzdata
+RUN ln --no-dereference --symbolic --force\
+     /usr/share/zoneinfo/$TIME_ZONE /etc/localtime
+RUN echo $TIME_ZONE > /etc/timezone
 
 RUN apt install --yes --no-install-recommends sudo
 RUN echo $'<PASSWORD/>\n<PASSWORD/>' | passwd
@@ -21,6 +31,7 @@ RUN cat $ssh_config_file\
     | tee ${ssh_config_file}_ > /dev/null
 RUN mv ${ssh_config_file}_ $ssh_config_file
 RUN echo ServerAliveInterval 60 | tee -a $ssh_config_file > /dev/null
+
 RUN mkdir /home/ddd/.ssh
 RUN chown ddd:ddd /home/ddd/.ssh
 COPY id_rsa /home/ddd/.ssh/id_rsa
@@ -47,11 +58,6 @@ RUN echo\
     >> /home/ddd/.bashrc
 RUN echo '. /home/ddd/DDD/ddd/cmd.sh profile' >> /home/ddd/.bashrc
 
-USER root
-RUN apt install --yes --no-install-recommends zip
-RUN apt install --yes --no-install-recommends wget
-RUN apt install --yes --no-install-recommends vim
-
 
 # jvm
 USER ddd
@@ -74,10 +80,10 @@ RUN bash temp.sh && rm temp.sh
 # swift
 USER ddd
 ENV swift_ver=5.4.2
-ENV swift_path=swift-$swift_ver-RELEASE-ubuntu$ubuntu_ver
+ENV swift_path=swift-$swift_ver-RELEASE-ubuntu$UBUNTU_VER
 RUN wget --no-check-certificate "\
 https://swift.org/builds/swift-$swift_ver-release/\
-ubuntu${ubuntu_ver//./}/swift-$swift_ver-RELEASE/$swift_path.tar.gz"
+ubuntu${UBUNTU_VER//./}/swift-$swift_ver-RELEASE/$swift_path.tar.gz"
 RUN tar -xvf $swift_path.tar.gz
 RUN rm $swift_path.tar.gz
 RUN mv $swift_path /home/ddd/.local/lib

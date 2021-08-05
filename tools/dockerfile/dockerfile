@@ -12,6 +12,8 @@ RUN apt update --yes
 RUN apt install --yes --no-install-recommends zip
 RUN apt install --yes --no-install-recommends wget
 RUN apt install --yes --no-install-recommends vim
+RUN apt install --yes --no-install-recommends git
+RUN apt install --yes --no-install-recommends chromium-browser
 
 RUN DEBIAN_FRONTEND=noninteractive\
      apt --yes --no-install-recommends install tzdata
@@ -132,6 +134,5 @@ RUN apt install --yes --no-install-recommends graphviz
 RUN DEBIAN_FRONTEND=noninteractive\
      apt install --yes --no-install-recommends dnsutils
 RUN apt install --yes --no-install-recommends gnome-keyring
-RUN apt install --yes --no-install-recommends chromium-browser
 RUN apt autoremove --yes
 USER ddd

@@ -28,9 +28,9 @@ main
     __function runFunction
 symbol
     i k v d
+    idx val_i key2duo key2val_i
     ct sz
 grammer
-    key2duo
     val val_
-    vals val_set
+    vals valset valer
 ```

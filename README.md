@@ -4,12 +4,18 @@
 ## Convention
 
 - Underscore & Dash
-	- 명칭이 자세하다면, 컴파일 시간(검색 시간)이 절약된다.
-		- 하이픈을 이용하며, 부분 수정이 용이하다.
+	- dash
+        - 컴파일 시간(검색 시간)을 절약하는 작명 스타일과 어울린다
+		- 이름의 부분 수정이 용이하다
 		- markup, table, exe
-	- 명칭이 무손실이면서 간단하다면, 용량이 절약된다.
-		- 언더스코어를 이용하며, 전체 수정이 용이하다.
+	- Underscore
+        - 계층 구조 및 용량을 절약하는 작명 스타일과 어울린다
+		- 이름의 전체 수정이 용이하다
 		- code, json, lib
+
+- Batchable Process
+    - 개별 요소가 서로 상호작용 없이 동일한 방식으로 처리된다
+    - 순수함수로 동작해야한다
 
 - M.L.
 ```
@@ -41,4 +47,32 @@ symbol
 grammer
     val val_
     vals valset valer
+```
+
+- Abbreviation
+  - impossible (callable, public)
+  - possible (value, private)
+  - one letter (one line scope)
+
+- Annotation
+```bash
+#
+one line
+# <>
+multiline
+multiline
+# </>
+```
+
+- CRLF
+```
+asdf(asdf + asdf)
+asdf(asdf +
+     asdf)
+asdf(
+  asdf +
+  asdf)
+asdf(asdf
+ + asdf + asdf
+ + asdf)
 ```

@@ -2,7 +2,7 @@ FROM tensorflow/tensorflow:latest-gpu
 
 ENV TIME_ZONE=/Asia/Seoul
 ENV UBUNTU_VER=18.04
-ENV DOCKERFILE_VER=20210804
+ENV DOCKERFILE_VER=20211021
 
 
 # default

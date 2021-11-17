@@ -1,6 +1,6 @@
-ARG TENSORFLOW_VERSION=2.6.0
+ARG TENSORFLOW_VERSION=2.7.0
 FROM tensorflow/tensorflow:$TENSORFLOW_VERSION-gpu
-ENV DOCKERFILE_VER=20211101
+ENV DOCKERFILE_VER=20211109
 
 ENV UBUNTU_VERSION=18.04
 ENV NODE_VERSION=16.13.0
@@ -98,6 +98,7 @@ RUN python -m pip install jupyter jedi==0.17.2
 
 
 USER root
+RUN apt install --yes --no-install-recommends git
 # RUN apt install --yes --no-install-recommends doxygen
 # RUN apt install --yes --no-install-recommends graphviz
 # RUN DEBIAN_FRONTEND=noninteractive\
@@ -105,6 +106,5 @@ USER root
 # RUN apt install --yes --no-install-recommends gnome-keyring
 # RUN apt install --yes --no-install-recommends chromium-browser
 # RUN apt install --yes --no-install-recommends vim
-# RUN apt install --yes --no-install-recommends git
 RUN apt autoremove --yes
 USER ddd

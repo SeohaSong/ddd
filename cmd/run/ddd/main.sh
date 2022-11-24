@@ -21,6 +21,7 @@ if $DDD .is-wsl
 then
     net_opt='--publish 2222:2222
              --publish 8000:8000
+             --publish 8080:8080
              --publish 8100:8100
              --publish 8888:8888'
 fi

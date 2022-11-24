@@ -1,10 +1,8 @@
-ARG TENSORFLOW_VERSION=2.7.0
+ARG TENSORFLOW_VERSION=2.10.0
 FROM tensorflow/tensorflow:$TENSORFLOW_VERSION-gpu
-ENV DOCKERFILE_VER=20211109
+ENV COMPILE_DATE=20221027
 
-ENV UBUNTU_VERSION=18.04
-ENV NODE_VERSION=16.13.0
-ENV PYTHON_VERSION=3.8
+ENV NODE_VERSION=18.12.0
 ENV PASSWORD=<PASSWORD/>
 
 ENV TIME_ZONE=/Asia/Seoul
@@ -64,14 +62,12 @@ RUN echo\
 RUN echo '. /home/ddd/DDD/ddd/cmd.sh profile' >> /home/ddd/.bashrc
 
 
-# cxx
 USER root
 RUN apt install --yes --no-install-recommends cmake
 RUN apt install --yes --no-install-recommends gdb
 RUN apt install --yes --no-install-recommends valgrind
 
 
-# node
 USER root
 ENV node_path=node-v$NODE_VERSION-linux-x64
 RUN wget --no-check-certificate\
@@ -87,14 +83,13 @@ RUN ln --symbolic\
  /home/ddd/.local/lib/$node_path/bin/npx /home/ddd/.local/bin/npx
 
 
-# python
 USER ddd
 RUN python -m pip install --upgrade pip
 RUN python -m pip install pyinstaller
 RUN python -m pip install pandas
-RUN python -m pip install scikit-learn
+RUN python -m pip install sklearn
 RUN python -m pip install matplotlib
-RUN python -m pip install jupyter jedi==0.17.2
+RUN python -m pip install jupyter
 
 
 USER root
